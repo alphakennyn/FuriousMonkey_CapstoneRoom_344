@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/PresentationLayer/Content/css")
+    @Scripts.Render("~/PresentationLayer/bundles/modernizr")
+    @Scripts.Render("~/PresentationLayer/bundles/jquery")
+    @Scripts.Render("~/PresentationLayer/bundles/bootstrap")
+    <script src="~/signalr/hubs/"></script>
+
+</head>
+<body>
+    @*<div class="sidebar">
+        <ul class="nav nav-sidebar">
+        </ul>
+        <ul class="nav nav-sidebar">
+            @*ViewContext.RouteData checks wgat method of the controller is active and then appends the class="active" to the <li>
+            <li class="@(ViewContext.RouteData.Values["action"].ToString() == "Home" ? "active" : "")"><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>User Profile <span class="sr-only">(current)</span></a></li>
+            <li class="@(ViewContext.RouteData.Values["action"].ToString() == "Calendar" ? "active" : "")"><a href="@Url.Action("Calendar", "Console")"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>View Calendar</a>
+            <li class="@(ViewContext.RouteData.Values["action"].ToString() == "Reservations" ? "active" : "")"><a href="@Url.Action("Reservations", "Console")"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>Reservations</a></li>
+            <li class="@(ViewContext.RouteData.Values["action"].ToString() == "Contact" ? "active" : "")"><a href="@Url.Action("Contact", "Console")"><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span>Contact us</a></li>
+           
+        </ul>
+
+    </div>*@
+    <div class="navbar">
+                <div class="custom-navbar-right">
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <div class="icon dropdownLogin"><span style="" class="fa fa-user-circle-o fa-2x"></span></div>
+                    
+                }
+                else
+                {
+                <div class="icon dropdownLogout"><span class="userId">@User.Identity.Name</span></div>
+                <div class="icon incomingMessage"><span style="" class="fa fa-envelope-o fa-2x"></span></div>
+
+                }
+               
+
+
+
+                    
+                </div>
+    @using (Ajax.BeginForm("login", "Account", new AjaxOptions
+    {
+        HttpMethod = "Post",
+        OnComplete= "OnSuccess"
+    }))
+    {
+            <div class="login-popup">
+                <ul>
+                    <li><input type="text" class="form-control input-sm" id="username" name="username" placeholder="Login" /></li>
+                    <li><input type="text" class="form-control input-sm" id="password" name="password" placeholder="Password" /></li>
+                    <li id="failedMessage"> </li>
+                    <li><button type="submit" id="loginButton" class="btn btn-primary">Log in</button></li>
+                </ul>
+            </div>
+    }
+    </div>
+  </div>
+        <div class="container-right">
+                
+                @RenderBody()
+                <hr />
+        </div>
+    <div class="footer">
+        <div class="footer-right">
+
+            <div class="showReservations icon-inverse"><span class="fa fa-server fa-2x" ></span></div>
+            <div class="showCalendar icon-inverse"><span class="fa fa-calendar fa-2x"></span></div>
+
+
+            
+        </div>
+       
+
+    </div>
+
+@using (Ajax.BeginForm("getReservations", "home", new AjaxOptions{ HttpMethod = "Post",OnComplete = "OnSuccess"})) { 
+
+<button class="hiddenButton reservationButton " type="submit">show reservations</button>
+
+}
+
+@using (Ajax.BeginForm("updateCalendar", "home", new AjaxOptions { HttpMethod = "Post", OnComplete = "OnSuccess" }))
+{
+	<input type="hidden" name="day" value="0" />
+	<input type="hidden" name="month" value="0" />
+	<input type="hidden" name="year" value="0" />
+	<button class="hiddenButton getNext " type="submit">show reservations</button>
+
+}
+@using (Ajax.BeginForm("cancelReservation", "home", new AjaxOptions { HttpMethod = "Post", OnComplete = "OnSuccess" }))
+{
+    <input type="hidden" name="day" value="0" />
+    <input type="hidden" name="month" value="0" />
+    <input type="hidden" name="year" value="0" />
+    <input type="hidden" name="resid" value="0" />
+    <button class="hiddenButton cancelReservationAjax " type="submit">show reservations</button>
+
+}
+
+    <script src="~/PresentationLayer/Scripts/calendar.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

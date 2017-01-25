@@ -1,0 +1,238 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<div class="calendar-header">
+    <ul class="upper-header">
+        <li>
+			<span class="dayOfTheWeek">@DateTime.Now.DayOfWeek</span> <br>
+			<div class="date" style="font-size:18px; margin-top:-20px"> <span class="month">@DateTime.Now.ToString("MMMM")</span> <span class="day">@DateTime.Now.ToString("dd")</span>    </div>
+</li>
+    </ul>
+    <ul class="calendar-buttons">
+        <li class="prev">❮</li>
+        <li class="next">❯</li>
+        <li>Day</li>
+        <li>Week</li>
+    </ul>
+    <ul class="room">
+        @for (var room = 1; room <= 25; room++)
+        {
+            <li>Room @room</li>
+        }
+    </ul>
+</div>
+
+<ul class="timeslots">
+    @for(var room = 1; room <= 25; room++) {
+        <li>
+            
+            <ul>
+                @for(var timeslot=8; timeslot<=23;timeslot++){
+                <li data-room="@room" data-timeslot="@timeslot">@timeslot:00</li>
+              
+                }    
+            </ul>
+        </li>
+  
+    }
+</ul>
+@using (Ajax.BeginForm("makeReservation", "Home", new AjaxOptions {
+    HttpMethod = "Post",
+    UpdateTargetId = "result"
+}))
+{
+<div class="reservation-popup-test ">
+    <ul>
+        <li class="header">Reserve<span class="glyphicon glyphicon-remove"></span></li> 
+        <li class="col-lg-12 col-md-12">Your selection is from <span id="firstTimeslot"></span> to <span id="lastTimeslot"></span></li>
+
+        <li class="col-lg-12 col-md-12"><input type="text" class="form-control input-sm" id="inputCourseName" name="description" placeholder="Course Name" /></li>
+
+        <input type="hidden" name="firstTimeslot" value="0" />
+        <input type="hidden" name="lastTimeslot" value="0" />
+        <input type="hidden" name="room" value="0" />
+        <input type="hidden" name="day" value="0" />
+        <input type="hidden" name="month" value="0" />
+        <input type="hidden" name="year" value="0" />
+        <li class="col-lg-offset-8 col-md-offset-8 col-sm-offset-8 col-xs-offset-8"><input type="submit" id="submitButton" class="btn btn-primary"></li>
+    </ul>
+
+
+</div>
+}
+
+<div class="waitlist-tooltip">
+
+
+</div>
+<div class="messages">
+    
+
+
+</div>
+<div class="reservations">
+    <div class="tabs">
+        <div class="reservation-tab active">Reservation</div>
+        <div class="waitlist-tab">Waitlist</div>
+    </div>
+    <div class="reservations-header">
+        <div class="header-room">Room</div><div class="header-date">Date</div><div class="header-description">Description</div><div class="header-from">From</div><div class="header-from">To</div>
+    </div>
+    <div class="reservation-content">
+       
+        
+    
+    </div>
+	<div class="waitlist-content">
+
+	</div>
+    <div class="confirm"><div class="confirm-yes">Confrim</div>
+    <div class="confirm-no">Cancel</div>
+    </div>
+</div>
+
+
+    <div class="modify-reservation">
+
+        <div class="header">Modify</div>
+        <div class="modify-sub-header"><b>Details</b></div>
+   @using (Ajax.BeginForm("modifyReservation", "Home", new AjaxOptions
+   {
+       HttpMethod = "Post",
+       UpdateTargetId = "result"
+   }))
+   {
+            <form class="form-horizontal">
+                <fieldset>
+                    
+                        <div class="modify-label">Room</div>
+                        <div class="col-lg-10">
+                            <select class="form-control input-sm"name="roomId">
+                                <option value="1" >H961-1</option>
+                                <option value="2" >H961-2</option>
+                                <option value="3" >H961-3</option>
+                                <option value="4" >H961-4</option>
+                                <option value="5" >H961-5</option>
+                                <option value="6" >H961-6</option>
+                                <option value="7" >H961-7</option>
+                                <option value="8" >H961-8</option>
+                                <option value="9" >H961-9</option>
+                                <option value="10" >H961-10</option>
+                                <option value="11" >H961-11</option>
+                                <option value="12" >H961-12</option>
+                                <option value="13" >H961-13</option>
+                                <option value="14" >H961-14</option>
+                                <option value="15" >H961-15</option>
+                                <option value="16" >H961-16</option>
+                                <option value="17" >H961-17</option>
+                                <option value="18" >H961-18</option>
+                                <option value="19" >H961-19</option>
+                                <option value="20" >H961-20</option>
+                                <option value="21" >H961-21</option>
+                                <option value="22" >H961-22</option>
+                                <option value="23" >H961-23</option>
+                                <option value="24" >H961-24</option>
+                                <option value="25" >H961-25</option>
+
+                            </select>
+                        </div>
+                   
+                  
+                    
+                    <div class="modify-label">Date</div>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control input-sm" name="date" id="modifyDate" placeholder="Date">
+                        </div>
+                    <div class="modify-label">Description</div>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control input-sm" name="description" id="modifyDescription" placeholder="Description">
+                    </div>
+
+                   
+               
+                   
+                    <div class="modify-label">Fom</div>
+                        <div class="col-lg-10">
+                            <select class="form-control input-sm ddl-initialTimeslot" name="initialTimeslot">
+                               
+                                <option value="8" >8:00</option>
+                                <option value="9" >9:00</option>
+                                <option value="10" >10:00</option>
+                                <option value="11" >11:00</option>
+                                <option value="12" >12:00</option>
+                                <option value="13" >13:00</option>
+                                <option value="14" >14:00</option>
+                                <option value="15" >15:00</option>
+                                <option value="16" >16:00</option>
+                                <option value="17" >17:00</option>
+                                <option value="18" >18:00</option>
+                                <option value="19" >19:00</option>
+                                <option value="20" >20:00</option>
+                                <option value="21" >21:00</option>
+                                <option value="22" >22:00</option>
+                                <option value="23" >23:00</option>
+                                <option value="24" >24:00</option>
+                                <option value="25" >25:00</option>
+
+                            </select>
+                        </div>
+                    <input type="hidden" name="resid" value="0" />
+                    <div class="modify-label">To</div>
+                        <div class="col-lg-10">
+                            <select class="form-control input-sm ddl-finalTimeslot" name="finalTimeslot">
+
+                                <option value="8" hidden >8:00</option>
+                                <option value="9" hidden >9:00</option>
+                                <option value="10" hidden >10:00</option>
+                                <option value="11" hidden >11:00</option>
+                                <option value="12" hidden >12:00</option>
+                                <option value="13" hidden >13:00</option>
+                                <option value="14" hidden >14:00</option>
+                                <option value="15" hidden >15:00</option>
+                                <option value="16" hidden >16:00</option>
+                                <option value="17" hidden >17:00</option>
+                                <option value="18" hidden >18:00</option>
+                                <option value="19" hidden >19:00</option>
+                                <option value="20" hidden >20:00</option>
+                                <option value="21" hidden >21:00</option>
+                                <option value="22" hidden >22:00</option>
+                                <option value="23" hidden >23:00</option>
+                                <option value="24" hidden >24:00</option>
+                                <option value="25" hidden >25:00</option>
+
+                            </select>
+
+                            <input type="hidden" name="day" value="0" />
+                            <input type="hidden" name="month" value="0" />
+                            <input type="hidden" name="year" value="0" />
+                    </div>
+                    <div class="modify-buttons">
+<button type="submit" class="btn btn-sm modifyButton">Modify Reservation</button><button type="button" class="btn btn-sm deleteReservation">Delete Reservation</button></div>
+                            
+                       
+                </fieldset>
+             </form class="form-horizontal">
+    
+
+        
+    
+
+         
+        
+
+
+  
+}
+
+
+<div class="Single-Timeslot-Reserve">
+	<ul>
+		<li class="col-lg-12 col-md-12">Your selection is from <span id="firstTimeslot"></span> to <span id="lastTimeslot"></span></li>
+		<li class="col-lg-12 col-md-12">Description: <span id="inputCourseName"></span></li>
+	</ul>
+</div>
+
+
+

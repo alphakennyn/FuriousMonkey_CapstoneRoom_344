@@ -1,0 +1,400 @@
+﻿* {box-sizing:border-box;}
+ul {list-style-type: none;}
+body {font-family: Verdana,sans-serif;}
+
+.calendar-header {
+    
+    width: inherit;
+    background: #3193c6;
+    height:115px;
+    position:fixed;
+    top:50px;
+}
+
+.upper-header{
+    margin: 0;
+    padding: 0px 25px;
+}
+
+.upper-header li {
+    color: white;
+    font-size: 30px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.room{
+    margin: 0;
+    padding: 10px 0;
+    background-color: #ddd;
+    padding-bottom:0px;
+    margin-top:47px;
+    padding-left:0px;
+    padding-right:0px;
+    height:40px;
+
+    width:6250px;
+    position:absolute;
+    
+    
+}
+
+
+.room li {
+    display: inline-block;
+    width: 250px;
+    color: #666;
+    text-align: center;
+margin-right:-5px;
+
+}
+
+.timeslots {
+ width:6250px;
+    margin: 0;
+    padding: 0px;
+
+    background-color: #ddd;
+    padding-bottom:0px;
+    margin-top:150px;
+}
+
+.timeslots li {
+    display: inline-block;
+    width: 250px;
+    color: #666;
+    text-align: center;
+margin-right:-5px;
+}
+.timeslots li ul {
+    width: 100%;
+    color: #666;
+    text-align: center;
+    background: #eee;
+    margin-top:15px;
+  
+padding-left:0px;
+
+}
+.timeslots li ul li{
+    display: block;
+    height: 40px;
+    margin-right: 0px;
+    text-align: center;
+    width: 100%;
+    vertical-align: middle;
+    line-height: 40px;
+    border: #d0d0d0;
+    border-style: solid;
+    border-width: 1px 1px 0px 0px;
+    border-bottom-style: dotted;
+}
+.timeslots li ul li.active{
+  background-color:#3193c6;
+  color:white;
+}
+.timeslots li ul li.reserved{
+  background-color:#3f4350;
+  color:white;
+  border-style:none;
+  font-size:12px;
+  text-align:left;
+  padding-left:7px;
+  line-height:150%;
+}
+.timeslots .active.reserved{
+background-color:#ec644b;
+content:"WaitList";
+
+}
+
+
+.timeslots li ul li.reserved-header{
+  background-color:#5c8194;
+  color:white;
+  text-align:center;
+  padding-left:70px;
+  line-height:300%;
+}
+
+.get-waitlist{
+    height:inherit;
+    width: 11px;
+
+    background-color:#6c6d6d;
+    position:relative;
+    float:right;
+     box-shadow: inset 0px -1px 0 #909090;
+     opacity:0.8;
+     padding-top:10px;
+     padding-left:2px;
+
+}
+.get-waitlist:before {
+    right: 11px;
+    bottom: 12px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid #6c6d6d;
+    content: " ";
+    font-size: 2px;
+    position:absolute;
+  
+}
+.calendar-buttons {
+    font-size: 20px;
+    color: white;
+    position: absolute;
+    bottom:3px;
+   padding: 0px 25px;
+    margin:0px;
+   
+}
+
+.waitlist-tooltip{
+position:fixed;
+background-color:#607583;
+opacity:0.8;
+width:200px;
+left:540px;
+border-radius:3px;
+padding:6px;
+display:none;
+color:white;
+}
+.messages{
+background-color:white;
+width:400px;
+position:fixed;
+
+top:50px;
+right:0px;
+padding-bottom:0px;
+display:none;
+z-index:70;
+}
+.message-item{
+background-color:white;
+height:60px;
+width:100%;
+ box-shadow:  inset 2px -1px 0px rgb(197, 197, 197);
+ padding:10px;
+ 
+
+
+}
+.waitlist-item {
+  color:white;
+    
+}
+.incomingMessage.active{
+background-color:#e74c3c;
+color:white;
+}
+
+.waitlist-tooltip:before {
+  bottom:-10px;
+  left:-14px;
+  position:relative;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid #607583;
+    content: " ";
+    font-size: 2px;
+    float:left;
+    opacity:01;
+}
+.reserved-left {
+float:left;
+padding-left:5px;
+}
+
+.calendar-buttons li{
+    font-size:15px;
+    display:inline-block;
+    background-color: #3fa9e2;
+    min-width:40px;
+    margin:-3px;
+    text-align:center;
+    padding-right:15px;
+    padding-left:15px;
+    height:40px;
+    vertical-align:middle;
+    line-height:40px;
+
+}
+.reservation-popup {
+    background-color: white;
+    position: fixed;
+    bottom: 0px;
+    height: 50px;
+    width:100%;
+    box-shadow: 0px 0px 10px grey;
+    display:none;
+}
+.reservation-popup h1{
+font-size:15px;
+text-align:center;
+margin:0px;
+margin-top:8px;
+margin-right:100px;
+
+}
+/*.reservation-popup-test::before{
+    content:"";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 15px 10px 0;
+    border-color: transparent #3f4350 transparent transparent;
+    z-index:10000;
+    margin-left:-10px;
+    margin-top:15px;
+    position:absolute;
+    text-shadow: 0px 0px 20px grey;
+}*/
+.reservation-popup-test{
+    width:300px;
+    height:165px;
+    background-color:white;
+     box-shadow: 0px 0px 9px grey;
+    position:absolute;
+    font-size:12px;
+    display:none;
+   
+
+}
+.reservation-popup-test ul{
+padding:0px;
+
+}
+.reservation-popup-test .header{
+    width:100%;
+    background-color:#3f4350;
+    padding-left:0px;
+    height:40px;
+    padding-left:20px;
+    line-height:37px;
+    font-size:14px;
+    color:white;
+}
+.reservation-popup-test .header span{
+   float:right;
+   margin-top:10px;
+   font-size:15px;
+}
+
+.reservation-popup-test ul li{
+margin-bottom:10px;
+}
+
+#submitButton{
+border-radius:0px;
+font-size:12px;
+background-color:#3f4350
+}
+
+.modify-reservation{
+    width:400px;
+    height:100%;
+    background-color:white;
+    position:absolute;
+    font-size:13px;
+    z-index:60;
+    position:fixed;
+    top:50px;
+    height:calc(100% - 90px);
+    right:500px;
+    box-shadow: inset -1px 0px 0 rgb(197, 197, 197);
+    display:none;
+
+   
+   
+
+}
+
+.modify-reservation .header{
+    box-shadow: inset 0px -1px 0 rgb(197, 197, 197);
+    width:100%;
+    background-color:white;
+    padding-left:0px;
+    height:60px;
+    padding-left:14px;
+    line-height:65px;
+    font-size:16px;
+      color:#2C7EDC;
+     
+}
+.modify-reservation .modify-sub-header {
+    padding:14px;
+ 
+}
+.modify-reservation .modify-row {
+
+ box-shadow: inset 0px -1px 0 rgb(197, 197, 197);
+    
+}
+.modify-reservation .modify-label {
+ font-size:12px;
+ line-height:35px;
+display:inline-block;
+width:20%;
+padding-left:14px;
+
+
+    
+}
+
+.modify-reservation .col-lg-10 {
+float:right;
+width:70%;
+margin-right:40px;
+
+ }
+ .modify-reservation .modify-buttons {
+ position:absolute;
+ bottom:20px;
+ left:20px;
+ display:none;
+
+ }
+ .modify-buttons button{
+ margin:10px;
+ border-radius:0px;
+ box-shadow:none;
+ }
+/* Add media queries for smaller screens */
+@media screen and (max-width:720px) {
+    .weekdays li, .days li {width: 13.1%;}
+}
+
+@media screen and (max-width: 420px) {
+    .weekdays li, .days li {width: 12.5%;}
+    .days li .active {padding: 2px;}
+}
+
+@media screen and (max-width: 290px) {
+    .weekdays li, .days li {width: 12.2%;}
+}
+.calendar-buttons li:hover{
+	background-color :#3b98ca;
+}
+
+.hiddenButton {
+	display: none;
+}
+
+.Single-Timeslot-Reserve {
+	 width:300px;
+    height:165px;
+    background-color:white;
+     box-shadow: 0px 0px 9px grey;
+    position:absolute;
+    font-size:12px;
+    display:none;
+
+}

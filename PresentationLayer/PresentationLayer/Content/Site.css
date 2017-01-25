@@ -1,0 +1,340 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+.navbar{
+  border-color: #0c84e4;
+  height:50px;
+  top:0px;
+  position:fixed;
+  width:100%;
+  background-color:white;
+  box-shadow: inset 0 -3px 0 rgb(197, 197, 197);
+  z-index:10;
+
+}
+
+.custom-navbar-right{
+   float:right;
+   
+}
+.icon{
+
+float:right;
+box-shadow: inset 0 -3px 0 #797979;
+color:#797979;
+font-size:16px;
+padding:10px;
+border-left:solid 1px #eeeeee;
+background-color:white;
+height:50px;
+}
+
+
+.icon:hover,.icon.active{
+  box-shadow: inset 0 -3px 0 #3193c6;
+  background-color:#f7f7f7;
+  transition: background-color 0.5s ease;
+  transition:box-shadow 0.5s ease;
+}
+
+.login-popup{
+    height:50px;
+    background-color:#3f4350;
+    position:fixed;
+    width:500px;
+    right:0px;
+    top:50px;
+    z-index:-100;
+    display:none;
+   box-shadow: inset 3px -3px 0 rgb(197, 197, 197);
+    
+    
+}
+.login-popup ul{
+   display:inline-flex;
+    padding-left:20px;
+    padding-top:5px;
+    padding-right:20px;
+    margin:0px; 
+}
+.login-popup ul li{
+
+   color:white;
+   margin-left:10px;
+}
+.userId{
+font-size:18px;
+
+}
+
+#failedMessage{
+line-height:17px;
+color:#de5757;
+}
+#loginButton
+{
+margin-top:5px;
+background-color:#848484;
+font-size:12px;
+padding: 2px;
+width:100px;
+border-radius:0px;  
+color:white;
+text-align:center;
+}
+.login-popup .form-control::-webkit-input-placeholder { color: white; }
+.login-popup .form-control:-moz-placeholder { color: white; }
+.login-popup .form-control::-moz-placeholder { color: white; }
+.login-popup .form-control:-ms-input-placeholder { color: white; }
+.login-popup .form-control:focus{
+    box-shadow: inset 0 -2px 0 #3193c6;
+}
+
+
+.container-right{   
+    margin-top:-10px;
+    padding:0px;    
+    z-index:-1;
+    
+    width:100%;
+}
+@media (max-width: 768px){
+    .container-right{   
+        
+    }
+    .navbar{
+       
+    }
+}
+
+/*-----------------------------*/
+/*--------Reservation----------*/
+/*-----------------------------*/
+.reservations{
+width:500px;
+height:calc(100% - 90px);
+background-color:white;
+position:fixed;
+float:right;
+top:50px;
+right:0px;
+z-index:40;
+display:none;
+}
+.reservations-header{
+    box-shadow: inset 0px -1px 0 rgb(197, 197, 197);
+
+    background-color:white;
+
+    height:50px;
+     margin:0px 14px;
+    line-height:64px;
+      font-size:12px;
+ box-shadow: inset 0px 0px 0 rgb(197, 197, 197);
+ color:#A6AEC4;
+     
+
+
+}
+/*Tabs*/
+.tabs{
+height:60px;
+font-size:15px;
+text-align:center;
+vertical-align:middle;
+box-shadow: inset 0px -1px 0 rgb(197, 197, 197);
+padding-left:20px;
+padding-right:240px;
+}
+.reservation-tab{
+padding-top:15px;
+float:left;
+width:90px;
+color:#b9b9b9;
+height:inherit;
+
+}
+
+
+.reservation-tab.active,.waitlist-tab.active{
+box-shadow: inset 0px -3px 0 #4B91E1;
+color:#64666B;
+
+}
+
+.waitlist-tab{
+padding-top:15px;
+display:inline-block;
+width:90px;
+color:#b9b9b9;
+height:inherit;
+
+}
+/*Reservation Header stuff*/
+
+.header-room{
+float:left;
+width:10%;
+
+}
+.header-date{
+float:left;
+width:20%;
+}
+.header-description{
+float:left;
+width:40%;
+}
+.header-from{
+float:left;
+width:15%;
+}
+.header-to{
+float:left;
+width:15%;
+}
+/*Reservation Content stuff*/
+.content-room{
+padding-left:14px;
+float:left;
+width:10%;
+
+}
+.content-date{
+float:left;
+width:20%;
+}
+.content-description{
+float:left;
+width:40%;
+}
+.content-from{
+float:left;
+width:15%;
+}
+.content-to{
+float:left;
+width:15%;
+}
+.reservation-content{
+    padding: 10px 0px;
+
+
+
+}
+.reservation-item{
+margin:8px 14px;
+background-color:#F6F7FA;
+height:30px;
+font-size:12px;
+line-height:27px;
+border-radius:5px;
+
+}
+.reservation-item.active{
+color:white;
+background-color:#50C14E;
+
+
+}
+
+ .confirm
+ {
+ font-size:13px;
+ position:relative;
+color: white;
+ padding:0px 0px;
+ display:none;
+ text-align:center;
+ width:270px;
+ }
+ .confirm-yes{
+ background-color: #00cc56;
+  float:left;
+ width:50%;
+  border-radius:0px 0px 0px 6px;
+ }
+ .confirm-no{
+ float:right;
+ width:50%;
+ background-color: red;
+border-radius:0px 0px 6px 0px;
+ }
+  .confirm-yes:hover{
+ background-color:green;
+ transition: background-color 0.5s ease;
+ }
+ .confirm-no:hover{
+  background-color:#f53d3d;
+ transition: background-color 0.5s ease;
+ }
+  /*.confirm:hover
+ {
+
+ background-color:green;
+ transition: background-color 0.5s ease;
+
+
+ }*/
+
+/*-----------------------------*/
+/*--------Footer---------------*/
+/*-----------------------------*/
+
+.footer{
+width:100%;
+position:fixed;
+bottom:0px;
+height:40px;
+z-index:41;
+background-color:white;
+box-shadow: inset 0 3px 0 rgb(197, 197, 197);
+
+}
+
+.footer .footer-right{
+float:right;
+}
+.icon-inverse{
+padding-top:10px;
+width:50px;
+float:right;
+box-shadow: inset 0 3px 0 #797979;
+color:#797979;
+padding-left:12px;
+border-left:solid 1px #eeeeee;
+background-color:white;
+}
+
+
+.icon-inverse:hover,.icon-inverse.active{
+  box-shadow: inset 0 3px 0 #3193c6;
+  background-color:#f7f7f7;
+  transition: background-color 0.5s ease;
+  transition:box-shadow 0.5s ease;
+}
+
+
+
+
