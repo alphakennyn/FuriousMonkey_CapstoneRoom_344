@@ -33,7 +33,7 @@ body {font-family: Verdana,sans-serif;}
     padding-right:0px;
     height:40px;
 
-    width:6250px;
+    width: 100%;
     position:absolute;
     
     
@@ -42,29 +42,30 @@ body {font-family: Verdana,sans-serif;}
 
 .room li {
     display: inline-block;
-    width: 250px;
+    width: 20%;
     color: #666;
     text-align: center;
-margin-right:-5px;
+    margin-right:-5px;
 
 }
 
 .timeslots {
- width:6250px;
+    width:100%;
     margin: 0;
     padding: 0px;
 
     background-color: #ddd;
     padding-bottom:0px;
     margin-top:150px;
+    margin-bottom:20px;
 }
 
 .timeslots li {
     display: inline-block;
-    width: 250px;
+    width: 20%;
     color: #666;
     text-align: center;
-margin-right:-5px;
+    margin-right:-5px;
 }
 .timeslots li ul {
     width: 100%;
@@ -72,8 +73,7 @@ margin-right:-5px;
     text-align: center;
     background: #eee;
     margin-top:15px;
-  
-padding-left:0px;
+    padding-left:0px;
 
 }
 .timeslots li ul li{
@@ -82,7 +82,7 @@ padding-left:0px;
     margin-right: 0px;
     text-align: center;
     width: 100%;
-    vertical-align: middle;
+    /*vertical-align: middle;*/
     line-height: 40px;
     border: #d0d0d0;
     border-style: solid;
