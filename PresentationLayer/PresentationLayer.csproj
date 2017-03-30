@@ -180,6 +180,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="LogicLayer\Authorization\AuthorizationManager.cs" />
+    <Compile Include="LogicLayer\DirectoryOfEquipment.cs" />
     <Compile Include="LogicLayer\Equipment.cs" />
     <Compile Include="LogicLayer\DirectoryOfReservations.cs" />
     <Compile Include="LogicLayer\DirectoryOfRooms.cs" />
