@@ -180,6 +180,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="LogicLayer\Authorization\AuthorizationManager.cs" />
+    <Compile Include="LogicLayer\Equipment.cs" />
     <Compile Include="LogicLayer\DirectoryOfReservations.cs" />
     <Compile Include="LogicLayer\DirectoryOfRooms.cs" />
     <Compile Include="LogicLayer\DirectoryOfTimeSlots.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="PresentationLayer\Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="StorageLayer\TDG\TDGEquipment.cs" />
     <Compile Include="StorageLayer\TDG\TDGReservation.cs" />
     <Compile Include="StorageLayer\TDG\TDGRoom.cs" />
     <Compile Include="StorageLayer\TDG\TDGTimeSlot.cs" />
