@@ -17,6 +17,7 @@
         <li>Week</li>
     </ul>
     <ul class="room">
+       
         @for (var room = 1; room <= 5; room++)
         {
             <li>Room @room</li>
@@ -29,21 +30,32 @@
         <li>
             
             <ul>
-                @for(var timeslot=1; timeslot<=24;timeslot++){
-                    if (timeslot != 24)
-                    {
+                @for(var timeslot=0; timeslot<24;timeslot++){
                         <li data-room="@room" data-timeslot="@timeslot">@timeslot:00</li>
-                    }
-                    else
-                    {
-                        <li data-room="@room" data-timeslot="@timeslot">00:00</li>
-                    }
                 }    
             </ul>
         </li>
   
     }
 </ul>
+<div class="equipment">
+    <ul class="equipmentHeader">
+        <li>
+            Get Equipment Here
+        </li>
+    </ul>
+    <ul class="equipmentBody">
+        <li>
+            Computer
+        </li>
+        <li>
+            Projector
+        </li>
+        <li>
+            Pencil
+        </li>
+    </ul>
+</div>
 @using (Ajax.BeginForm("makeReservation", "Home", new AjaxOptions {
     HttpMethod = "Post",
     UpdateTargetId = "result"
