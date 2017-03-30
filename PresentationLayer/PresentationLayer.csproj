@@ -185,10 +185,13 @@
     <Compile Include="LogicLayer\DirectoryOfReservations.cs" />
     <Compile Include="LogicLayer\DirectoryOfRooms.cs" />
     <Compile Include="LogicLayer\DirectoryOfTimeSlots.cs" />
+    <Compile Include="LogicLayer\IdentityMaps\EquipmentIdentityMap.cs" />
     <Compile Include="LogicLayer\IdentityMaps\TimeSlotIdentityMap.cs" />
     <Compile Include="LogicLayer\IdentityMaps\UserIdentityMap.cs" />
     <Compile Include="LogicLayer\IdentityMaps\WaitsForIdentityMap.cs" />
+    <Compile Include="LogicLayer\Mappers\EquipmentMapper.cs" />
     <Compile Include="LogicLayer\Mappers\TimeSlotMapper.cs" />
+    <Compile Include="LogicLayer\Mappers\EquipmentWaitsForMapper.cs" />
     <Compile Include="LogicLayer\Reservation.cs" />
     <Compile Include="LogicLayer\ReservationConsole.cs" />
     <Compile Include="LogicLayer\Mappers\ReservationMapper.cs" />
@@ -218,6 +221,7 @@
     <Compile Include="StorageLayer\TDG\TDGRoom.cs" />
     <Compile Include="StorageLayer\TDG\TDGTimeSlot.cs" />
     <Compile Include="StorageLayer\TDG\TDGUser.cs" />
+    <Compile Include="StorageLayer\TDG\TDGEquipmentWaitsFor.cs" />
     <Compile Include="StorageLayer\TDG\TDGWaitsFor.cs" />
   </ItemGroup>
   <ItemGroup>

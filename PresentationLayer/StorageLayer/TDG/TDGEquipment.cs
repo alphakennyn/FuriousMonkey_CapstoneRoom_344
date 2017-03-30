@@ -119,7 +119,7 @@ namespace TDG
         /**
          * Delete equipment(s) from the database
          */
-        public void deleteEquipmment(List<Equipment> deleteList)
+        public void deleteEquipment(List<Equipment> deleteList)
         {
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
 
