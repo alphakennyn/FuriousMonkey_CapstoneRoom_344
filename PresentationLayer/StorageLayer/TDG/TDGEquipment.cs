@@ -233,7 +233,7 @@ namespace TDG
                         return records;
                     }
                     Object[] attributes = new Object[FIELDS.Length];
-                    attributes[0] = reader[0]; // equipmentID                                                 UPDATE THIS MAYBE?
+                    attributes[0] = reader[0]; // equipmentID                                               
                     attributes[1] = reader[1]; // equipmentName
                     attributes[2] = reader[2]; //reservationID
                     records.Add((int)reader[0], attributes);

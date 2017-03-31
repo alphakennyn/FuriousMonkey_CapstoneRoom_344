@@ -98,7 +98,7 @@ namespace Mappers
             //Loop through each of the result:
             foreach (KeyValuePair<int, Object[]> record in result)
             {
-                Equipment equipment = DirectoryOfEquipment.getInstance().makeNewEquipment((int)record.Key, (int)record.Value[1], (int)record.Value[2]);
+                Equipment equipment = DirectoryOfEquipment.getInstance().makeNewEquipment((int)record.Key, (int)record.Value[1], (string)record.Value[2]);
 
                 // Add to IdentityMap
                 equipmentIdentityMap.addTo(equipment);

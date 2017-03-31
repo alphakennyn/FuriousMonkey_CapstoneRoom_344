@@ -25,12 +25,12 @@ namespace LogicLayer
         }
 
         // Method to make a new time slot
-        public TimeSlot makeNewEquipment(int equipmentID, int reservationID, int equipmentName)
+        public Equipment makeNewEquipment(int equipmentID, int reservationID, string equipmentName)
         {
-            TimeSlot timeSlot = new TimeSlot(timeslotID, reservationID, hour);
-            if (!timeSlotList.Contains(timeSlot))
-                timeSlotList.Add(timeSlot);
-            return timeSlot;
+            Equipment equipment = new Equipment(equipmentID, reservationID, equipmentName);
+            if (!equipmentList.Contains(equipment))
+                equipmentList.Add(equipment);
+            return equipment;
         }
 
 
