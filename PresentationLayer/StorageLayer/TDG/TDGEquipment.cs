@@ -27,7 +27,7 @@ namespace TDG
         private const String TABLE_NAME = "equipment";
 
         // Field names of the table
-        private readonly String[] FIELDS = { "EquipmentID", "EquipmentNum" };
+        private readonly String[] FIELDS = { "equipmentID", "equipmentName","reservationID" };
 
         // Database server (localhost)
         private const String DATABASE_SERVER = "127.0.0.1";
@@ -234,7 +234,8 @@ namespace TDG
                     }
                     Object[] attributes = new Object[FIELDS.Length];
                     attributes[0] = reader[0]; // equipmentID                                                 UPDATE THIS MAYBE?
-                    attributes[1] = reader[1]; // equipmentNum
+                    attributes[1] = reader[1]; // equipmentName
+                    attributes[2] = reader[2]; //reservationID
                     records.Add((int)reader[0], attributes);
                 }
             }

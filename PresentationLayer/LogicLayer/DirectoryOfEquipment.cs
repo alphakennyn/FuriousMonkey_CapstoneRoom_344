@@ -24,6 +24,16 @@ namespace LogicLayer
             return instance;
         }
 
+        // Method to make a new time slot
+        public TimeSlot makeNewEquipment(int equipmentID, int reservationID, int equipmentName)
+        {
+            TimeSlot timeSlot = new TimeSlot(timeslotID, reservationID, hour);
+            if (!timeSlotList.Contains(timeSlot))
+                timeSlotList.Add(timeSlot);
+            return timeSlot;
+        }
+
+
         //need to make sure equipment is not used at same time
         //todo: make it make sense with the EquipmentMapper
 

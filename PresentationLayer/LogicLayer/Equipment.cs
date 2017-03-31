@@ -9,22 +9,23 @@ namespace LogicLayer
     public class Equipment
     {
         public int equipmentID { get; set; }
+        public int reservationID { get; set; }
         public string equipmentName { get; set; }
-        public List<Reservation> equipmentReservations { get; set; }
-        public List<int> equipmentWaitList { get; set; }
+        
+        public Queue<int> equipmentWaitList { get; set; }
 
         public Equipment()
         {
             equipmentID = 0;
             equipmentName = "";
-            equipmentReservations = new List<Reservation>();
+            reservationID = 0;
         }
 
-        public Equipment(int equipmentID, string equipmentName)
+        public Equipment(int equipmentID, int resID,  string equipmentName)
         {
             this.equipmentID = equipmentID;
             this.equipmentName = equipmentName;
-            this.equipmentReservations = new List<Reservation>();
+            this.reservationID = resID;
         }
     }
 }
