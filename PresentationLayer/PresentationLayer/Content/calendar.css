@@ -37,25 +37,56 @@ body {font-family: Verdana,sans-serif;}
     position:relative;
 }
 .equipment{
+   display: block;
    margin: auto;
    width: 15%;
-   height: 100%;
-   background-color: pink;
-   float: left;
+   height: 160px;
    margin-top: 125px;
    position: fixed;
+   border-left: 2px solid #3F4350;
+   border-right: 2px solid #3F4350;
 }
 .equipmentHeader{
-    display: inline-block;
+    display: block;
     width: 100%;
     height: 40px;
+    font-weight: bold;
     color: #666;
-    background-color: cadetblue;
     text-align: center;
     padding-top: 7px;
+    padding-left: 0px;
+    border: 2px solid #3F4350;
+    border-left: none;
+    border-right: none;
 }
 .equipmentBody{
-
+    position: relative;
+    bottom: 12px;
+    display: block;
+    width: 100%;
+    color: #666;
+    text-align: center;
+    padding: 0px;
+    border: 0px solid #3F4350;
+    border-top: none;
+    color: white;
+}
+.equipmentBody li{
+    display: block;
+    height: 40px;
+    width: 50%;
+    line-height: 40px;
+    border-style: solid;
+    border: none;
+    border-bottom: 2px solid black;
+    float: left;
+    background-color: #3193C6;
+}
+.numberSelect{
+    width: 40%;
+    height: 30px;
+    text-align: left;
+    background-color: #3FA9E2;
 }
 .room li {
     display: inline-block;
@@ -63,7 +94,6 @@ body {font-family: Verdana,sans-serif;}
     color: #666;
     text-align: center;
     margin-right:-5px;
-
 }
 
 .timeslots {
@@ -90,7 +120,6 @@ body {font-family: Verdana,sans-serif;}
     background: #eee;
     margin-top:15px;
     padding-left:0px;
-
 }
 .timeslots li ul li{
     display: block;
@@ -102,7 +131,6 @@ body {font-family: Verdana,sans-serif;}
     border: #d0d0d0;
     border-style: solid;
     border-width: 1px 0px 0px 1px;
-    border-bottom-style: dotted;
 }
 .timeslots li ul li.active{
   background-color:#3193c6;
