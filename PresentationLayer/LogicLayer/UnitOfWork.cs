@@ -29,10 +29,16 @@ namespace LogicLayer
         private List<TimeSlot> timeSlotDeletedList = new List<TimeSlot>();
         private List<TimeSlot> timeSlotChangedList = new List<TimeSlot>();
 
+        private List<Equipment> equipmentNewList = new List<Equipment>();
+        private List<Equipment> equipmentDeletedList = new List<Equipment>();
+        private List<Equipment> equipmentChangedList = new List<Equipment>();
+
         UserMapper userMapper = UserMapper.getInstance();
         RoomMapper roomMapper = RoomMapper.getInstance();
         ReservationMapper reservationMapper = ReservationMapper.getInstance();
         TimeSlotMapper timeSlotMapper = TimeSlotMapper.getInstance();
+        EquipmentMapper equipmentMapper = EquipmentMapper.getInstance();
+
         private UnitOfWork() { }
 
         public static UnitOfWork getInstance()
@@ -90,6 +96,20 @@ namespace LogicLayer
             timeSlotChangedList.Add(timeslot);
         }
 
+        public void registerNew(Equipment equipment)
+        {
+            equipmentNewList.Add(equipment);
+        }
+
+        public void registerDeleted(Equipment equipment)
+        {
+            equipmentDeletedList.Add(equipment);
+        }
+
+        public void registerDirty(Equipment equipment)
+        {
+            equipmentChangedList.Add(equipment);
+        }
         public void commit()
         {
 
@@ -123,6 +143,13 @@ namespace LogicLayer
             if (timeSlotDeletedList.Count() != 0)
                 timeSlotMapper.deleteTimeSlot(timeSlotDeletedList);
 
+            if (timeSlotNewList.Count() != 0)
+                equipmentMapper.addequipment(equipmentNewList);
+            if (timeSlotChangedList.Count() != 0)
+                equipmentMapper.updateequipment(equipmentChangedList);
+            if (timeSlotDeletedList.Count() != 0)
+                equipmentMapper.deleteequipment(equipmentDeletedList);
+
             //Empty the lists after the Commit.
             userDeletedList.Clear();
             userChangedList.Clear();
@@ -136,6 +163,9 @@ namespace LogicLayer
             timeSlotNewList.Clear();
             timeSlotChangedList.Clear();
             timeSlotDeletedList.Clear();
+            equipmentNewList.Clear();
+            equipmentChangedList.Clear();
+            equipmentDeletedList.Clear();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace LogicLayer
         }
 
         //Method to make a reservation
-        public void makeReservation(int userID, int roomID, string desc, DateTime date, int firstHour, int lastHour, List<String> equipmentList)
+        public void makeReservation(int userID, int roomID, string desc, DateTime date, int firstHour, int lastHour, List<String> equipmentNameList)
         {
             List<int> hours = new List<int>();
             for (int i = firstHour; i <= lastHour; i++)
@@ -45,13 +45,26 @@ namespace LogicLayer
                 //The equipment handling and its waitlist
                 if (reservation.date.Date == date.Date)
                 {
-                    foreach (Equipment e in reservation.equipmentList)
+                    foreach (TimeSlot timeSlot in reservation.timeSlots)
                     {
-
+                        for (int i = firstHour; i <= lastHour; i++)
+                        {
+                            if (timeSlot.hour == i)
+                            {
+                                foreach (Equipment e in reservation.equipmentList)
+                                {
+                                    if (!e.equipmentWaitList.Contains(userID)&&reservation.userID!=userID)
+                                    {
+                                        e.equipmentWaitList.Enqueue(userID);
+                                        EquipmentMapper.getInstance().find(date, firstHour, lastHour, equipmentNameList);
+                                    }
+                                }
+                            }
+                        }
                     }
 
+                               
                 }
-
 
                 // Compare if the date (not the time portion) are the same and the rooms are the same
                 if (reservation.date.Date == date.Date && reservation.roomID == roomID)

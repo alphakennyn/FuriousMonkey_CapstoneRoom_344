@@ -61,7 +61,22 @@ namespace LogicLayer
             }
         }
 
-        
+        public Equipment modifyEquipment(int equipmentID, int resID, Queue<int> wlist)
+        {
+            for (int i = 0; i < equipmentList.Count; i++)
+            {
+                if (equipmentList[i].equipmentID == equipmentID)
+                {
+                    equipmentList[i].reservationID = resID;
+                    equipmentList[i].equipmentID = equipmentID;
+                    equipmentList[i].equipmentWaitList = wlist;
+                    return equipmentList[i];
+                }
+            }
+            return null;
+        }
+
+
 
     }
 }

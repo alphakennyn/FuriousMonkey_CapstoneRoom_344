@@ -9,7 +9,9 @@ using LogicLayer;
 namespace TDG
 {
 
-    //need to modify equipmentwaitsfor table IMPORTANT
+    //need to modify equipment
+
+    //table IMPORTANT
 
     class TDGEquipmentWaitsFor
     {

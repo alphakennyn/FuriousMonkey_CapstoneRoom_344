@@ -56,6 +56,25 @@ namespace Mappers
          * Retrieve a TimeSlot given its TimeSlot ID.
          */
 
+        public void addEquipment(List<Equipment> newList)
+        {
+            tdgEquipment.addEquipment(newList);
+            EquipmentWaitsForMapper.refreshWaitsFor(newList);
+        }
+
+        // For Unit of Work: A list of timeslots to be updated to the DB is passed to the TDG. 
+        public void updateTimeSlot(List<Equipment> updateList)
+        {
+            tdgEquipment.updateEquipment(updateList);
+            EquipmentWaitsForMapper.refreshWaitsFor(updateList);
+        }
+
+        //For Unit of Work : A list of timeslots to be deleted in the DB is passes to the TDG.
+        public void deleteEquipment(List<Equipment> deleteList)
+        {
+            tdgEquipment.deleteEquipment(deleteList);
+        }
+
         public Dictionary<int, Equipment> getAllEquipment()
         {
             //Get all equipment from the equipment Identity Map.
@@ -140,6 +159,23 @@ namespace Mappers
         public List<Equipment> getListOfEquipment()
         {
             return (DirectoryOfEquipment.getInstance().equipmentList);
+        }
+
+        //should return list of ids
+        public void find(DateTime date, int firstHour, int lastHour, List<string> equipmentNameList)
+        {
+            //EquipmentIdentityMap.getInstance().
+
+            TDGEquipment.getInstance().findAvailableEquipment(date, firstHour,lastHour, equipmentNameList);
+        }
+
+        public void setEquipment(int equipmentID, int reservationID, Queue<int> equipmentWaitList)
+        {
+            // Update the timeslot
+            Equipment equipment = DirectoryOfEquipment.getInstance().modifyEquipment(equipmentID, reservationID, equipmentWaitList);
+
+            // Register it to the unit of work
+            UnitOfWork.getInstance().registerDirty(equipment);
         }
 
     }

@@ -24,9 +24,9 @@ namespace Mappers
             return tdgWaitsFor.getAllUsers(timeSlotID);
         }
 
-        public void refreshWaitsFor(List<TimeSlot> refreshList)
+        public void refreshWaitsFor(List<Equipment> refreshList)
         {
-            tdgWaitsFor.refreshWaitsFor(refreshList);
+            tdgEquipmentWaitsFor.refreshWaitsFor(refreshList);
         }
     }
 }
