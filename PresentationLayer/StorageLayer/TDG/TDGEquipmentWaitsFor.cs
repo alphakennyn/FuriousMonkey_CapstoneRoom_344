@@ -22,7 +22,7 @@ namespace TDG
         private static TDGEquipmentWaitsFor instance = new TDGEquipmentWaitsFor();
 
         // Field names of the table
-        private static readonly String[] FIELDS = { "timeSlotID", "userID", "dateTime" };
+        private static readonly String[] FIELDS = { "equipmentID", "userID", "dateTime" };
 
         // Database server (localhost)
         private const String DATABASE_SERVER = "127.0.0.1";
