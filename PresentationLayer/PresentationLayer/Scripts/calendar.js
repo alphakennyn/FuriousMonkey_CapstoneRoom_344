@@ -19,8 +19,6 @@ $(".reservation-popup-test").draggable();
 //header calendar 
 var date = new Date();
 
-
-
 var months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 var days = ["SUNDAY","MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 
@@ -52,9 +50,19 @@ function setCalendarDate() {
     
 }
 
+function rendercalendar() {
+}
 
+//Function is run when submit button is clicked
+function setEquipment(event) {
+    var computers = $('#computers').val();
+    $("input[name='numOfComputers']").attr("value", computers);
 
-function rendercalendar(){
+    var projectors = $('#projectors').val();
+    $("input[name='numOfProjectors']").attr("value", projectors);
+
+    var markers = $('#markers').val();
+    $("input[name='numOfMarkers']").attr("value", markers);
 }
 
 //Function is run when any of the timeslot li is clicked
@@ -157,7 +165,6 @@ function timeslotClicked(event) {
 
         }
     });
-
     
     $("#firstTimeslot").html(firstAndLastTimeslot[0]);
     $("input[name='firstTimeslot']").attr("value", firstAndLastTimeslot[0]);
@@ -165,9 +172,7 @@ function timeslotClicked(event) {
     $("#lastTimeslot").html(firstAndLastTimeslot[1] + 1);
     $("input[name='lastTimeslot']").attr("value", firstAndLastTimeslot[1]);
 
-
     }
-
 }
 
 $(".timeslots li ul li").on("click.firstFunction", function () {
@@ -252,6 +257,8 @@ $.connection.hub.start().done(function () {
 
 
 $("#submitButton").click(function () {
+
+    setEquipment(this);
     $(".glyphicon-remove").click();
 })
 
