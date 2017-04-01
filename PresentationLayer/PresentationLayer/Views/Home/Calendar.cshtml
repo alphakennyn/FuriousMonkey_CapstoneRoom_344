@@ -38,7 +38,7 @@
   
     }
 </ul>
-<form class="equipment">
+<div class="equipment">
     <ul class="equipmentHeader">
         <li>
             Reserve Equipment
@@ -49,22 +49,22 @@
             Computer
         </li>
         <li>
-            <input type="number" name="numOfComputers" class="numberSelect" min="0" max="3" value="0">
+            <input type="number" id="computers" name="computers" class="numberSelect" min="0" max="3" value="0">
         </li>
         <li>
             Projector
         </li>
         <li>
-            <input type="number" name="numOfProjectors" class="numberSelect" min="0" max="1" value="0">
+            <input type="number" id="projectors" name="projectors" class="numberSelect" min="0" max="1" value="0">
         </li>
         <li>
-            Power Bar
+            Markers
         </li>
         <li>
-            <input type="number" name="numOfMarkers" class="numberSelect" min="0" max="2" value="0">
+            <input type="number" id="markers" name="markers" class="numberSelect" min="0" max="4" value="0">
         </li>
     </ul>
-</form>
+</div>
 @using (Ajax.BeginForm("makeReservation", "Home", new AjaxOptions {
     HttpMethod = "Post",
     UpdateTargetId = "result"
@@ -83,6 +83,9 @@
         <input type="hidden" name="day" value="0" />
         <input type="hidden" name="month" value="0" />
         <input type="hidden" name="year" value="0" />
+        <input type="hidden" name="numOfComputers" value="0" />
+        <input type="hidden" name="numOfProjectors" value="0" />
+        <input type="hidden" name="numOfMarkers" value="0" />
         <li class="col-lg-offset-8 col-md-offset-8 col-sm-offset-8 col-xs-offset-8"><input type="submit" id="submitButton" class="btn btn-primary"></li>
     </ul>
 
