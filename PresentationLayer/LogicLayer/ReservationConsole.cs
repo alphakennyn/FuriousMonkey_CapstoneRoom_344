@@ -27,11 +27,12 @@ namespace LogicLayer
             ReservationMapper.getInstance().initializeDirectory();
             UserMapper.getInstance().initializeDirectory();
             RoomMapper.getInstance().initializeDirectory();
+            EquipmentMapper.getInstance().initializeDirectory();
             updateDirectories();
         }
 
         //Method to make a reservation
-        public void makeReservation(int userID, int roomID, string desc, DateTime date, int firstHour, int lastHour)
+        public void makeReservation(int userID, int roomID, string desc, DateTime date, int firstHour, int lastHour, List<String> equipmentList)
         {
             List<int> hours = new List<int>();
             for (int i = firstHour; i <= lastHour; i++)
@@ -40,6 +41,18 @@ namespace LogicLayer
             //foreach (Reservation reservation in directoryOfReservations.reservationList)
             foreach (Reservation reservation in ReservationMapper.getInstance().getListOfReservations())
             {
+
+                //The equipment handling and its waitlist
+                if (reservation.date.Date == date.Date)
+                {
+                    foreach (Equipment e in reservation.equipmentList)
+                    {
+
+                    }
+
+                }
+
+
                 // Compare if the date (not the time portion) are the same and the rooms are the same
                 if (reservation.date.Date == date.Date && reservation.roomID == roomID)
                 {
@@ -93,6 +106,21 @@ namespace LogicLayer
                         ReservationMapper.getInstance().getListOfReservations()[i].timeSlots.Add(timeSlot);
                 }
             }
+
+            // Updating equipment of each reservations
+            
+            List<Equipment> equipmentList = EquipmentMapper.getInstance().getAllEquipment().Values.ToList();
+            for (int i = 0; i < ReservationMapper.getInstance().getListOfReservations().Count; i++)
+            {
+                foreach (Equipment equipment in equipmentList)
+                {
+                    if (ReservationMapper.getInstance().getListOfReservations()[i].reservationID == equipment.reservationID && !ReservationMapper.getInstance().getListOfReservations()[i].equipmentList.Contains(equipment))
+                        ReservationMapper.getInstance().getListOfReservations()[i].equipmentList.Add(equipment);
+                }
+            }
+            
+
+            //UPDATING WAITLIST FOR EACH EQUIPMENT?????????????????????????????????????????????????
 
             // Updating the waitList of each timeSlot
             for (int i = 0; i < TimeSlotMapper.getInstance().getListOfTimeSlots().Count; i++)

@@ -56,36 +56,42 @@ namespace Mappers
          * Retrieve a TimeSlot given its TimeSlot ID.
          */
 
-        public Equipment getEquipment(int equipmentID)
+        public Dictionary<int, Equipment> getAllEquipment()
         {
+            //Get all equipment from the equipment Identity Map.
+            Dictionary<int, Equipment> equipmentDic = equipmentIdentityMap.findAll();
 
-            //Try to obtain the TimeSlot from the TimeSlot identity map
-            Equipment equipment = equipmentIdentityMap.find(equipmentID);
-            Object[] result = null;
+            //Get all timeslots in the DB
+            Dictionary<int, Object[]> result = tdgEquipment.getAll();
 
-            if (equipment == null)
+            // If it's empty, simply return those from the identity map
+            if (result == null)
             {
-                //If not found in TimeSlot identity map then, it uses TDG to try to retrieve from DB.
-                result = tdgEquipment.get(equipmentID);
+                return equipmentDic;
+            }
 
-                if (result != null)
+            //Loop through each of the result:
+            foreach (KeyValuePair<int, Object[]> record in result)
+            {
+                //The timeSlot is not in the Time Slot identity map.
+                //Create an instance, add it to the equipment indentity map and to the return variable
+                if (!equipmentDic.ContainsKey(record.Key))
                 {
-                    //The TimeSlot object was obtained from the TDG (and from the DB)
-                    //Instantiate the object by passing values to parameters
-                    DirectoryOfTimeSlots.getInstance().makeNewTimeSlot((int)result[0], (int)result[1], (int)result[2]);
+                    Equipment equipment = DirectoryOfEquipment.getInstance().makeNewEquipment((int)record.Key, (int)record.Value[1], (string)record.Value[2].ToString());
 
-                    //Add TimeSlot to the TimeSlot IdentityMap
+                    // Add to IdentityMap
                     equipmentIdentityMap.addTo(equipment);
+
+                    equipmentDic.Add(equipment.equipmentID, equipment);
                 }
             }
-            //Null is returned if it is not found in the TimeSlot identity map NOR in the DB
-            return equipment;
+            return equipmentDic;
         }
 
         /**
          * Retrieve all timeslots
          * */
-      
+
 
         /**
         * Initialize the list of time slots, used for instantiating console
@@ -98,7 +104,7 @@ namespace Mappers
             //Loop through each of the result:
             foreach (KeyValuePair<int, Object[]> record in result)
             {
-                Equipment equipment = DirectoryOfEquipment.getInstance().makeNewEquipment((int)record.Key, (int)record.Value[1], (string)record.Value[2]);
+                Equipment equipment = DirectoryOfEquipment.getInstance().makeNewEquipment((int)record.Key, (int)record.Value[2], (string)record.Value[1]);
 
                 // Add to IdentityMap
                 equipmentIdentityMap.addTo(equipment);
