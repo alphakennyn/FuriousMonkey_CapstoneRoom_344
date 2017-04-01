@@ -41,7 +41,8 @@ namespace CapstoneRoomScheduler.Controllers
                 var weeklyConstraint = ReservationConsole.getInstance().weeklyConstraintCheck(userID, date);
                 var dailyConstraint = ReservationConsole.getInstance().dailyConstraintCheck(userID, date, firstTimeSlot, lastTimeSlot);
 
-                //Store a name of equipment for each equipment requested
+                //Store a name of equipment for each equipment requested into equipmentNameList
+                //Ex. 2 computers, 1 projector and 0 markers = {computer, computer, projector}
                 List<string> equipmentNameList = new List<string>();
                 for (int i = 0; i < numOfComputers; i++)
                 {
@@ -54,12 +55,6 @@ namespace CapstoneRoomScheduler.Controllers
                 for (int k = 0; k < numOfMarkers; k++)
                 {
                     equipmentNameList.Add("marker");
-                }
-                
-                //Testing whether this even works
-                for (int x = 0; x < equipmentNameList.Count(); x++)
-                {
-                    Debug.WriteLine(equipmentNameList[x]);
                 }
 
                 if (dailyConstraint && weeklyConstraint)

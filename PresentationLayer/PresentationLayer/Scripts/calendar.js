@@ -43,17 +43,6 @@ $(".prev").click(function () {
     
 });
 
-$(".numOfComputers").click(function () {
-    $("input[name='day']").attr("value", numOfComputers);
-});
-
-$(".numOfProjectors").click(function () {
-    $("input[name='day']").attr("value", numOfComputers);
-});
-
-$(".numOfMarkers").click(function () {
-    $("input[name='day']").attr("value", numOfComputers);
-});
 function setCalendarDate() {
     $("input[name='day']").attr("value", (date.getDate()));
     $("input[name='month']").attr("value", (date.getMonth() + 1));
@@ -61,9 +50,19 @@ function setCalendarDate() {
     
 }
 
-
-
 function rendercalendar() {
+}
+
+//Function is run when submit button is clicked
+function setEquipment(event) {
+    var computers = $('#computers').val();
+    $("input[name='numOfComputers']").attr("value", computers);
+
+    var projectors = $('#projectors').val();
+    $("input[name='numOfProjectors']").attr("value", projectors);
+
+    var markers = $('#markers').val();
+    $("input[name='numOfMarkers']").attr("value", markers);
 }
 
 //Function is run when any of the timeslot li is clicked
@@ -258,6 +257,8 @@ $.connection.hub.start().done(function () {
 
 
 $("#submitButton").click(function () {
+
+    setEquipment(this);
     $(".glyphicon-remove").click();
 })
 
