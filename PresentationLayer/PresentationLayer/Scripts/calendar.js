@@ -19,8 +19,6 @@ $(".reservation-popup-test").draggable();
 //header calendar 
 var date = new Date();
 
-
-
 var months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 var days = ["SUNDAY","MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 
@@ -45,6 +43,17 @@ $(".prev").click(function () {
     
 });
 
+$(".numOfComputers").click(function () {
+    $("input[name='day']").attr("value", numOfComputers);
+});
+
+$(".numOfProjectors").click(function () {
+    $("input[name='day']").attr("value", numOfComputers);
+});
+
+$(".numOfMarkers").click(function () {
+    $("input[name='day']").attr("value", numOfComputers);
+});
 function setCalendarDate() {
     $("input[name='day']").attr("value", (date.getDate()));
     $("input[name='month']").attr("value", (date.getMonth() + 1));
@@ -54,7 +63,7 @@ function setCalendarDate() {
 
 
 
-function rendercalendar(){
+function rendercalendar() {
 }
 
 //Function is run when any of the timeslot li is clicked
@@ -157,7 +166,6 @@ function timeslotClicked(event) {
 
         }
     });
-
     
     $("#firstTimeslot").html(firstAndLastTimeslot[0]);
     $("input[name='firstTimeslot']").attr("value", firstAndLastTimeslot[0]);
@@ -165,9 +173,7 @@ function timeslotClicked(event) {
     $("#lastTimeslot").html(firstAndLastTimeslot[1] + 1);
     $("input[name='lastTimeslot']").attr("value", firstAndLastTimeslot[1]);
 
-
     }
-
 }
 
 $(".timeslots li ul li").on("click.firstFunction", function () {
