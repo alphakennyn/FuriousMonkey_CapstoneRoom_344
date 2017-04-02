@@ -84,7 +84,7 @@ namespace CapstoneRoomScheduler.LogicLayer.IdentityMaps
             //We simply want to not return the reference to the dictionary used here.
             foreach (KeyValuePair<int, Equipment> pair in this.equipmentList_ActiveMemory)
             {
-                if ((pair.Value).reservationID == reservationID)
+                if ((pair.Value).reservationIDList.Contains(reservationID))
                     newDictionary.Add(pair.Key, pair.Value);
             }
 
@@ -103,7 +103,7 @@ namespace CapstoneRoomScheduler.LogicLayer.IdentityMaps
             {
                 foreach (int reservationID in IDlist)
                 {
-                    if (pair.Value.reservationID.Equals(reservationID))
+                    if (pair.Value.reservationIDList.Contains(reservationID))
                     {
                         hours ++;
                     }

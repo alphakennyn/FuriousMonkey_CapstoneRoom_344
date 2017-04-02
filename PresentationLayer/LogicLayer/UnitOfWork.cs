@@ -144,11 +144,11 @@ namespace LogicLayer
                 timeSlotMapper.deleteTimeSlot(timeSlotDeletedList);
 
             if (equipmentNewList.Count() != 0)
-                equipmentMapper.addequipment(equipmentNewList);
+               // equipmentMapper.addequipment(equipmentNewList);
             if (timeSlotChangedList.Count() != 0)
-                equipmentMapper.updateequipment(equipmentChangedList);
+                //equipmentMapper.updateequipment(equipmentChangedList);
             if (timeSlotDeletedList.Count() != 0)
-                equipmentMapper.deleteequipment(equipmentDeletedList);
+                //equipmentMapper.deleteequipment(equipmentDeletedList);
 
             //Empty the lists after the Commit.
             userDeletedList.Clear();
