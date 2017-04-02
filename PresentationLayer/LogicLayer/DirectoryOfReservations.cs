@@ -29,7 +29,7 @@ namespace LogicLayer
         public Reservation makeNewReservation(int reservationID, int userID, int roomID, string desc, DateTime date, List<Equipment> equipmentList)
         {
 
-            Reservation reservation = new Reservation(reservationID, userID, roomID, desc, date,equipmentList);
+            Reservation reservation = new Reservation(reservationID, userID, roomID, desc, date, equipmentList);
 
             reservationList.Add(reservation);
 

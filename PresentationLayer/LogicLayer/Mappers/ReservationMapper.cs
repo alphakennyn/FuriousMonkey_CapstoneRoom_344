@@ -53,13 +53,13 @@ namespace Mappers
          * Handles the creation of a new object of type Reservation.
          **/
 
-        public Reservation makeNew(int userID, int roomID, string desc, DateTime date, List<int> equipmentIDList)
+        public Reservation makeNew(int userID, int roomID, string desc, DateTime date, List<Equipment> equipmentList)
         {
             //Get the next reservation ID
             int reservationID = getNextID();
 
             //Make a new reservation object
-            Reservation reservation = DirectoryOfReservations.getInstance().makeNewReservation(reservationID, userID, roomID, desc, date, equipmentIDList);
+            Reservation reservation = DirectoryOfReservations.getInstance().makeNewReservation(reservationID, userID, roomID, desc, date, equipmentList);
 
             //Add new reservation to identity map
             reservationIdentityMap.addTo(reservation);
@@ -83,11 +83,15 @@ namespace Mappers
             {
                 //If not found in Reservation identity map then, it uses TDG to try to retrieve from DB.
                 result = tdgReservation.get(reservationID);
-
+                
                 if (result != null)
                 {
                     //Reservation object was retrieved from the TDG and values obtained are passed as parameters to instantiate it
-                    reservation = DirectoryOfReservations.getInstance().makeNewReservation((int)result[0], (int)result[1], (int)result[2], (String)result[3], Convert.ToDateTime(result[4]));
+
+                    //Get list of equipment
+                    List<Equipment> equipmentList = getEquipmentFromTDG(reservationID);
+
+                    reservation = DirectoryOfReservations.getInstance().makeNewReservation((int)result[0], (int)result[1], (int)result[2], (String)result[3], Convert.ToDateTime(result[4]), equipmentList);
                     // Add it to identity map
                     reservationIdentityMap.addTo(reservation);
                 }
@@ -121,8 +125,9 @@ namespace Mappers
                 //Create an instance, add it to the reservation identity map and to the return variable
                 if (!reservations.ContainsKey(record.Key))
                 {
-
-                    Reservation reservation = DirectoryOfReservations.getInstance().makeNewReservation((int)record.Key, (int)record.Value[1], (int)record.Value[2], (string)record.Value[3], (DateTime)record.Value[4]);
+                    //Get list of equipment
+                    List<Equipment> equipmentList = getEquipmentFromTDG((int)record.Key);
+                    Reservation reservation = DirectoryOfReservations.getInstance().makeNewReservation((int)record.Key, (int)record.Value[1], (int)record.Value[2], (string)record.Value[3], (DateTime)record.Value[4], equipmentList);
 
                     reservationIdentityMap.addTo(reservation);
                     reservations.Add(reservation.reservationID, reservation);
@@ -142,8 +147,12 @@ namespace Mappers
             //Loop through each of the result:
             foreach (KeyValuePair<int, Object[]> record in result)
             {
-               //Create an instance, add it to the reservation identity map and to the return variable
-               Reservation reservation = DirectoryOfReservations.getInstance().makeNewReservation((int)record.Key, (int)record.Value[1], (int)record.Value[2], (string)record.Value[3], (DateTime)record.Value[4]);
+                //Create an instance, add it to the reservation identity map and to the return variable
+
+                //Get list of equipment
+                List<Equipment> equipmentList = getEquipmentFromTDG((int)record.Key);
+
+                Reservation reservation = DirectoryOfReservations.getInstance().makeNewReservation((int)record.Key, (int)record.Value[1], (int)record.Value[2], (string)record.Value[3], (DateTime)record.Value[4], equipmentList);
                reservationIdentityMap.addTo(reservation);
             }
         }
@@ -238,10 +247,27 @@ namespace Mappers
             return IDlist;
         }
 
-
         public List<Reservation> getListOfReservations()
         {
             return DirectoryOfReservations.getInstance().reservationList;
+        }
+
+        public List<Equipment> getEquipmentFromTDG(int reservationID)
+        {
+
+            Object[] equipmentIDObjects = TDGEquipment.getInstance().getEquipmentIDs(reservationID);
+            List<int> equipmentIDs = new List<int>();
+            foreach (Object o in equipmentIDObjects)
+            {
+                equipmentIDs.Add((int)o);
+            }
+
+            List<Equipment> equipmentList = new List<Equipment>();
+            foreach (int id in equipmentIDs)
+            {
+                equipmentList.Add(EquipmentMapper.getInstance().getEquipment(id));
+            }
+            return equipmentList;
         }
 
     }

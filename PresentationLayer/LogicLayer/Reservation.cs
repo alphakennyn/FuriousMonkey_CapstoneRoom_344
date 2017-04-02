@@ -37,8 +37,5 @@ namespace LogicLayer
             this.timeSlots = new List<TimeSlot>();
             this.equipmentList = equipmentList;
         }
-
-
-
     }
 }

@@ -26,7 +26,7 @@ namespace Mappers
 
         public void refreshWaitsFor(List<Equipment> refreshList)
         {
-            tdgEquipmentWaitsFor.refreshWaitsFor(refreshList);
+            TDGEquipmentWaitsFor.refreshWaitsFor(refreshList);
         }
     }
 }

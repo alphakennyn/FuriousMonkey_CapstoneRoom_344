@@ -71,7 +71,7 @@ namespace TDG
         {
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
 
-            // Attempt to open the connection and create many reservations
+            // Attempt to open the connection and create many equipmentss
             try
             {
                 conn.Open();
@@ -97,7 +97,7 @@ namespace TDG
         {
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
 
-            // Attempt to open the connection and create many reservations
+            // Attempt to open the connection and create many equipments
             try
             {
                 conn.Open();
@@ -123,7 +123,7 @@ namespace TDG
         {
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
 
-            // Attempt to open the connection and create many reservations
+            // Attempt to open the connection and create many equipments
             try
             {
                 conn.Open();
@@ -251,7 +251,7 @@ namespace TDG
         {
 
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
-            String commandLine = "SELECT DISTINCT equipmentID FROM reservationidlist WHERE "+reservationID+ "= reservationID";
+            String commandLine = "SELECT DISTINCT equipmentID FROM reservationidlist WHERE "+reservationID+ " = reservationID";
             MySqlDataReader reader = null;
             Object[] record = null; // to be returned
 

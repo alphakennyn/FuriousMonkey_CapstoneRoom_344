@@ -86,11 +86,17 @@ namespace LogicLayer
             }
 
             bool equipmentAvailable = true; //Will be used to track if equipment was available
-            List<int> equipmentIDList = new List<int>();
-
+            List<int> availableEquipmentIDList;
+            List<Equipment> equipmentList = new List<Equipment>();
             if (equipmentAvailable)
             {
-                equipmentIDList = getEquipment(date, firstHour, lastHour, equipmentNameList);
+                availableEquipmentIDList = getAvailableEquipmentIDList(date, firstHour, lastHour, equipmentNameList);
+
+                foreach(int id in availableEquipmentIDList)
+                {
+                    equipmentList.Add(EquipmentMapper.getInstance().getEquipment(id));
+                }
+
             }
             else
             {
@@ -100,7 +106,7 @@ namespace LogicLayer
             {
                 if (weeklyConstraintCheck(userID, date) && dailyConstraintCheck(userID,date,firstHour,lastHour))
                 {
-                    Reservation reservation = ReservationMapper.getInstance().makeNew(userID, roomID, desc, date, equipmentIDList);
+                    Reservation reservation = ReservationMapper.getInstance().makeNew(userID, roomID, desc, date, equipmentList);
 
                     for (int i = 0; i < hours.Count; i++)
                     {
@@ -136,7 +142,7 @@ namespace LogicLayer
             {
                 foreach (Equipment equipment in equipmentList)
                 {
-                    if (ReservationMapper.getInstance().getListOfReservations()[i].reservationID == equipment.reservationID && !ReservationMapper.getInstance().getListOfReservations()[i].equipmentList.Contains(equipment))
+                    if (equipment.reservationIDList.Contains(ReservationMapper.getInstance().getListOfReservations()[i].reservationID) && !ReservationMapper.getInstance().getListOfReservations()[i].equipmentList.Contains(equipment))
                         ReservationMapper.getInstance().getListOfReservations()[i].equipmentList.Add(equipment);
                 }
             }
@@ -233,8 +239,11 @@ namespace LogicLayer
                             if (weeklyConstraintCheck(userID, date) && dailyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(resID).date, 
                                 resToModify.timeSlots[i].hour, resToModify.timeSlots[i].hour))
                             {
+                                //get list of equipment
+                                List<Equipment> equipmentList = ReservationMapper.getInstance().getEquipmentFromTDG(resID);
+
                                 Reservation res = ReservationMapper.getInstance().makeNew(userID, ReservationMapper.getInstance().getReservation(resID).roomID,
-                                                                                        "", ReservationMapper.getInstance().getReservation(resID).date);
+                                                                                        "", ReservationMapper.getInstance().getReservation(resID).date, equipmentList);
                                 ReservationMapper.getInstance().done();
                                 TimeSlotMapper.getInstance().setTimeSlot(resToModify.timeSlots[i].timeSlotID, res.reservationID, resToModify.timeSlots[i].waitlist);
                                 TimeSlotMapper.getInstance().done();
@@ -284,7 +293,9 @@ namespace LogicLayer
                             {
                                 int myroomid = ReservationMapper.getInstance().getReservation(resID).roomID;
                                 DateTime mydate = ReservationMapper.getInstance().getReservation(resID).date;
-                                Reservation res = ReservationMapper.getInstance().makeNew(userID, myroomid, "", mydate);
+                                //get equipment from reservationID
+                                List<Equipment> equipmentList = ReservationMapper.getInstance().getEquipmentFromTDG(resID);
+                                Reservation res = ReservationMapper.getInstance().makeNew(userID, myroomid, "", mydate, equipmentList);
                                 //Reservation res = directoryOfReservations.makeNewReservation(directoryOfReservations.getReservation(reservationID).roomID, userID, "",
                                 //   directoryOfReservations.getReservation(reservationID).date);
                                 ReservationMapper.getInstance().done();
@@ -375,8 +386,10 @@ namespace LogicLayer
                                 && dailyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(reservationID).date,
                                 TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour, TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour))
                             {
+                                //get list of equipment
+                                List<Equipment> equipmentList = ReservationMapper.getInstance().getEquipmentFromTDG(reservationID);
                                 Reservation res = ReservationMapper.getInstance().makeNew(userID, ReservationMapper.getInstance().getReservation(reservationID).roomID,
-                             "", ReservationMapper.getInstance().getReservation(reservationID).date);
+                             "", ReservationMapper.getInstance().getReservation(reservationID).date, equipmentList);
                                 ReservationMapper.getInstance().done();
                                 TimeSlotMapper.getInstance().setTimeSlot(TimeSlotMapper.getInstance().getListOfTimeSlots()[i].timeSlotID, res.reservationID,
                                                                          TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist);
@@ -522,7 +535,7 @@ namespace LogicLayer
             return false;
         }
 
-        public List<int> getEquipment(DateTime date, int firstHour, int lastHour, List<string> equipmentNameList)
+        public List<int> getAvailableEquipmentIDList(DateTime date, int firstHour, int lastHour, List<string> equipmentNameList)
         {
             updateDirectories();
             List<int> equipmentIDList = new List<int>();
