@@ -197,13 +197,12 @@ namespace TDG
         }
 
 
-        public Object[] getReservationIDs(int equipmentID)
+        public List<int> getEquipmentIDs(int reservationID)
         {
-
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
-            String commandLine = "SELECT reservationID FROM reservationidlist WHERE " + FIELDS[0] + " = " + equipmentID;
+            String commandLine = "SELECT " + "equipmentID" + " FROM " + "reservationidlist" + " WHERE " + "reservationID" + " = " + reservationID;
+            List<int> records = new List<int>();
             MySqlDataReader reader = null;
-            Object[] record = null; // to be returned
 
             try
             {
@@ -211,30 +210,34 @@ namespace TDG
                 MySqlCommand cmd = new MySqlCommand(commandLine, conn);
                 reader = cmd.ExecuteReader();
 
-                // If no record is found, return null
+                //If no record is found, return empty records
                 if (!reader.HasRows)
                 {
                     reader.Close();
                     conn.Close();
-                    return null;
+                    return records;
+
                 }
 
-                // There is only one result since we find it by id
-                record = new Object[1];
+                //For each reader, add it to the list
                 while (reader.Read())
                 {
                     if (reader[0].GetType() == typeof(System.DBNull))
                     {
                         reader.Close();
                         conn.Close();
-                        return null;
+                        return records;
                     }
-                    record[0] = reader[0];
+
+                    int id;
+                    id = (int)reader[0]; //equipmentID
+
+                    records.Add(id);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(e.Message);
             }
             finally
             {
@@ -243,17 +246,16 @@ namespace TDG
                 conn.Close();
             }
 
-            // Format and return the result
-            return record;
+            //Format and return the result
+            return records;
         }
 
-        public Object[] getEquipmentIDs(int reservationID)
+        public List<int> getReservationIDs(int equipmentID)
         {
-
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
-            String commandLine = "SELECT DISTINCT equipmentID FROM reservationidlist WHERE "+reservationID+ " = reservationID";
+            String commandLine = "SELECT " + "reservationID" + " FROM " + "reservationidlist" + " WHERE " + "equipmentID" + " = " + equipmentID;
+            List<int> records = new List<int>();
             MySqlDataReader reader = null;
-            Object[] record = null; // to be returned
 
             try
             {
@@ -261,30 +263,34 @@ namespace TDG
                 MySqlCommand cmd = new MySqlCommand(commandLine, conn);
                 reader = cmd.ExecuteReader();
 
-                // If no record is found, return null
+                //If no record is found, return empty records
                 if (!reader.HasRows)
                 {
                     reader.Close();
                     conn.Close();
-                    return null;
+                    return records;
+
                 }
 
-                // There is only one result since we find it by id
-                record = new Object[1];
+                //For each reader, add it to the list
                 while (reader.Read())
                 {
                     if (reader[0].GetType() == typeof(System.DBNull))
                     {
                         reader.Close();
                         conn.Close();
-                        return null;
+                        return records;
                     }
-                    record[0] = reader[0];
+
+                    int id;
+                    id = (int)reader[0]; //equipmentID
+
+                    records.Add(id);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(e.Message);
             }
             finally
             {
@@ -293,8 +299,8 @@ namespace TDG
                 conn.Close();
             }
 
-            // Format and return the result
-            return record;
+            //Format and return the result
+            return records;
         }
 
         /**

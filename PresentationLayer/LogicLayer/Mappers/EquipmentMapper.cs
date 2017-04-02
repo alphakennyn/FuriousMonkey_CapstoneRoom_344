@@ -130,7 +130,6 @@ namespace Mappers
             //Try to obtain the TimeSlot from the TimeSlot identity map
             Equipment equipment = equipmentIdentityMap.find(equipmentID);
             Object[] result = null;
-            Object[] reservationIDso = null;
             List<int> reservationIDs = null;
 
             if (equipment == null)
@@ -138,11 +137,7 @@ namespace Mappers
                 //If not found in TimeSlot identity map then, it uses TDG to try to retrieve from DB.
                 result = tdgEquipment.get(equipmentID);
 
-                reservationIDso=tdgEquipment.getReservationIDs(equipmentID);
-                foreach(Object o in reservationIDso)
-                {
-                    reservationIDs.Add((int)o);
-                }
+                reservationIDs=tdgEquipment.getReservationIDs(equipmentID);
 
                 if (result != null)
                 {

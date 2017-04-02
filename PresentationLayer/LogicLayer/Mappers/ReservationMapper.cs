@@ -255,12 +255,7 @@ namespace Mappers
         public List<Equipment> getEquipmentFromTDG(int reservationID)
         {
 
-            Object[] equipmentIDObjects = TDGEquipment.getInstance().getEquipmentIDs(reservationID);
-            List<int> equipmentIDs = new List<int>();
-            foreach (Object o in equipmentIDObjects)
-            {
-                equipmentIDs.Add((int)o);
-            }
+            List<int> equipmentIDs = TDGEquipment.getInstance().getEquipmentIDs(reservationID);
 
             List<Equipment> equipmentList = new List<Equipment>();
             foreach (int id in equipmentIDs)
