@@ -9,7 +9,7 @@ namespace LogicLayer
     public class Equipment
     {
         public int equipmentID { get; set; }
-        public int reservationID { get; set; }
+        public List<int> reservationIDList { get; set; }
         public string equipmentName { get; set; }
         
         public Queue<int> equipmentWaitList { get; set; }
@@ -18,14 +18,21 @@ namespace LogicLayer
         {
             equipmentID = 0;
             equipmentName = "";
-            reservationID = 0;
+            reservationIDList = new List<int>();
         }
 
-        public Equipment(int equipmentID, int resID,  string equipmentName)
+        public Equipment(int equipmentID, List<int> resIDList,  string equipmentName)
         {
             this.equipmentID = equipmentID;
             this.equipmentName = equipmentName;
-            this.reservationID = resID;
+            this.reservationIDList = resIDList;
         }
+
+        public void addReservationID(int reservationID)
+        {
+            this.reservationIDList.Add(reservationID);
+        }
+
+        //Add method to remove reservation ID
     }
 }

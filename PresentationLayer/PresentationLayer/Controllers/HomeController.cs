@@ -60,7 +60,7 @@ namespace CapstoneRoomScheduler.Controllers
                 if (dailyConstraint && weeklyConstraint)
                 {
                     Thread.Sleep(4000); //locks room for 4 seconds for mutual exclusion
-                    ReservationConsole.getInstance().makeReservation(userID, room, description, date, firstTimeSlot, lastTimeSlot);
+                    ReservationConsole.getInstance().makeReservation(userID, room, description, date, firstTimeSlot, lastTimeSlot, equipmentNameList);
                     GlobalHost.ConnectionManager.GetHubContext<CalendarHub>().Clients.Group(User.Identity.GetUserId()).incomingMessage("Reservation has been successfully created");
                     updateCalendar(year, month, day);
                 }

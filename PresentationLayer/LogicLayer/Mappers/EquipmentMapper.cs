@@ -130,13 +130,31 @@ namespace Mappers
             }
         }
 
-       
+        public Equipment getEquipment(int equipmentID)
+        {
 
-       
+            //Try to obtain the TimeSlot from the TimeSlot identity map
+            Equipment equipment = equipmentIdentityMap.find(equipmentID);
+            Object[] result = null;
 
-        
+            if (equipment == null)
+            {
+                //If not found in TimeSlot identity map then, it uses TDG to try to retrieve from DB.
+                result = tdgEquipment.get(equipmentID);
 
-       
+                if (result != null)
+                {
+                    //The TimeSlot object was obtained from the TDG (and from the DB)
+                    //Instantiate the object by passing values to parameters
+                    DirectoryOfEquipment.getInstance().makeNewEquipment((int)result[0], (int)result[1], (int)result[2]);
+
+                    //Add TimeSlot to the TimeSlot IdentityMap
+                    equipmentIdentityMap.addTo(equipment);
+                }
+            }
+            //Null is returned if it is not found in the TimeSlot identity map NOR in the DB
+            return equipment;
+        }
 
         /**
          * Done: commit
@@ -154,19 +172,10 @@ namespace Mappers
          * Retrieve the total number of hours associated with given reservation IDs
          */
 
-        
 
         public List<Equipment> getListOfEquipment()
         {
             return (DirectoryOfEquipment.getInstance().equipmentList);
-        }
-
-        //should return list of ids
-        public void find(DateTime date, int firstHour, int lastHour, List<string> equipmentNameList)
-        {
-            //EquipmentIdentityMap.getInstance().
-
-            TDGEquipment.getInstance().findAvailableEquipment(date, firstHour,lastHour, equipmentNameList);
         }
 
         public void setEquipment(int equipmentID, int reservationID, Queue<int> equipmentWaitList)

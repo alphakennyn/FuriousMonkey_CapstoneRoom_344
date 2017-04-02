@@ -25,8 +25,15 @@ namespace LogicLayer
         }
 
         // Method to make a new reservation
-        public Reservation makeNewReservation(int reservationID, int userID, int roomID, string desc, DateTime date)
+        public Reservation makeNewReservation(int reservationID, int userID, int roomID, string desc, DateTime date, List<int> equipmentIDList)
         {
+            //Add equipment to reservation
+            List<Equipment> equipmentList = new List<Equipment>();
+            foreach(int id in equipmentIDList)
+            {
+                equipmentList.Add()
+            }
+
             Reservation reservation = new Reservation(reservationID, userID, roomID, desc, date);
 
             reservationList.Add(reservation);

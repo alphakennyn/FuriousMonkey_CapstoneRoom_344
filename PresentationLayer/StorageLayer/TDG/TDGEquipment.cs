@@ -27,7 +27,7 @@ namespace TDG
         private const String TABLE_NAME = "equipment";
 
         // Field names of the table
-        private readonly String[] FIELDS = { "equipmentID", "equipmentName","reservationID" };
+        private readonly String[] FIELDS = { "equipmentID", "equipmentName", "reservationIDList" };
 
         // Database server (localhost)
         private const String DATABASE_SERVER = "127.0.0.1";

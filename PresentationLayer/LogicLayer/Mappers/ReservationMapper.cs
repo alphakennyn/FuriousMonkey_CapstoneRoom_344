@@ -53,13 +53,13 @@ namespace Mappers
          * Handles the creation of a new object of type Reservation.
          **/
 
-        public Reservation makeNew(int userID, int roomID, string desc, DateTime date)
+        public Reservation makeNew(int userID, int roomID, string desc, DateTime date, List<int> equipmentIDList)
         {
             //Get the next reservation ID
             int reservationID = getNextID();
 
             //Make a new reservation object
-            Reservation reservation = DirectoryOfReservations.getInstance().makeNewReservation(reservationID, userID, roomID, desc, date);
+            Reservation reservation = DirectoryOfReservations.getInstance().makeNewReservation(reservationID, userID, roomID, desc, date, equipmentIDList);
 
             //Add new reservation to identity map
             reservationIdentityMap.addTo(reservation);
@@ -241,7 +241,7 @@ namespace Mappers
 
         public List<Reservation> getListOfReservations()
         {
-            return (DirectoryOfReservations.getInstance().reservationList);
+            return DirectoryOfReservations.getInstance().reservationList;
         }
 
     }

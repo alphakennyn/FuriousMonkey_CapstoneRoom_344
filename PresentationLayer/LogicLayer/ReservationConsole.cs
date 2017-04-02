@@ -39,31 +39,29 @@ namespace LogicLayer
                 hours.Add(i);
 
             //foreach (Reservation reservation in directoryOfReservations.reservationList)
-            foreach (Reservation reservation in ReservationMapper.getInstance().getListOfReservations())
+            foreach (Reservation reservation in ReservationMapper.getInstance().getListOfReservations())    //Goes through all reservations in listOfReservations
             {
 
-                //The equipment handling and its waitlist
-                if (reservation.date.Date == date.Date)
+                //The equipment handling and its waitlist ***********EQUIPMENT WAITLIST WILL BE HANDLED IN THIS SECTION**********
+                if (reservation.date.Date == date.Date) //Checks each reservation with a matching date to the date selected
                 {
-                    foreach (TimeSlot timeSlot in reservation.timeSlots)
+                    foreach (TimeSlot timeSlot in reservation.timeSlots)    //Check every timeslot in a reservation of the same date
                     {
-                        for (int i = firstHour; i <= lastHour; i++)
+                        for (int i = firstHour; i <= lastHour; i++) //Checks if timeslot above has overlapping time with selected time
                         {
-                            if (timeSlot.hour == i)
+                            if (timeSlot.hour == i) //if the timeslot above overlaps
                             {
-                                foreach (Equipment e in reservation.equipmentList)
+                                foreach (Equipment e in reservation.equipmentList)  //Goes through all equipment in currently checked reservation
                                 {
-                                    if (!e.equipmentWaitList.Contains(userID)&&reservation.userID!=userID)
+                                    if (!e.equipmentWaitList.Contains(userID) && reservation.userID != userID)
                                     {
                                         e.equipmentWaitList.Enqueue(userID);
-                                        EquipmentMapper.getInstance().find(date, firstHour, lastHour, equipmentNameList);
+
                                     }
                                 }
                             }
                         }
                     }
-
-                               
                 }
 
                 // Compare if the date (not the time portion) are the same and the rooms are the same
@@ -87,11 +85,22 @@ namespace LogicLayer
                 }
             }
 
+            bool equipmentAvailable = true; //Will be used to track if equipment was available
+            List<int> equipmentIDList = new List<int>();
+
+            if (equipmentAvailable)
+            {
+                equipmentIDList = getEquipment(date, firstHour, lastHour, equipmentNameList);
+            }
+            else
+            {
+                //Don't let them reserve the room, terminate here and show that they were added to the equipment waitlist
+            }
             if (hours.Count > 0)
             {
                 if (weeklyConstraintCheck(userID, date) && dailyConstraintCheck(userID,date,firstHour,lastHour))
                 {
-                    Reservation reservation = ReservationMapper.getInstance().makeNew(userID, roomID, desc, date);
+                    Reservation reservation = ReservationMapper.getInstance().makeNew(userID, roomID, desc, date, equipmentIDList);
 
                     for (int i = 0; i < hours.Count; i++)
                     {
@@ -513,5 +522,58 @@ namespace LogicLayer
             return false;
         }
 
+        public List<int> getEquipment(DateTime date, int firstHour, int lastHour, List<string> equipmentNameList)
+        {
+            updateDirectories();
+            List<int> equipmentIDList = new List<int>();
+            List<Reservation> reservationList = ReservationMapper.getInstance().getListOfReservations();
+            List<Equipment> equipmentList = EquipmentMapper.getInstance().getListOfEquipment();
+
+            foreach (string name in equipmentNameList)   //perform on each string in equipmentNameList *e.g. "computer"
+            {
+                foreach (Equipment equipment in equipmentList)   //Goes through all equipment objects
+                {
+                    bool isAvailable = true;
+                    if (equipment.equipmentName == name)    //Comparing to all objects with matching name *e.g. to all computers
+                    {
+                        foreach (int resID in equipment.reservationIDList)  //go through each reservation ID in the matching equipment
+                        {
+                            foreach (Reservation reservation in reservationList) //go through every reservation
+                            {
+                                if (reservation.reservationID == resID) //compare to reservations that are borrowing the specified equipment *e.g. reservations with computers
+                                {
+                                    if (reservation.date == date)   //Compare to reservations that occur on the same date as selected
+                                    {
+                                        foreach (TimeSlot timeslot in reservation.timeSlots)    //Goes through the timeslots in the above reservations
+                                        {
+                                            for (int i = firstHour; i <= lastHour; i++)
+                                            {
+                                                if (timeslot.hour == i) //If the reservation occurs at the same time as the specified time
+                                                {
+                                                    isAvailable = false;
+                                                }                                          
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (isAvailable)
+                    {
+                        equipmentIDList.Add(equipment.equipmentID);
+                        break;
+                    }
+                }
+
+            }
+            if (equipmentIDList.Count() != equipmentNameList.Count())
+            {
+                //something fucked up
+            }
+
+            return equipmentIDList;
+        }
     }
 }
