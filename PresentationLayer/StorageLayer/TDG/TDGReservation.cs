@@ -281,11 +281,23 @@ namespace TDG
             String commandLine = "INSERT INTO " + TABLE_NAME + " VALUES (" + reservation.reservationID + "," +
                 reservation.userID + "," + reservation.roomID + ",'" + reservation.description + "', '" +
                 mySqlDate + " ');";
+
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+            List<MySqlCommand> cmdEquipmentList = new List<MySqlCommand>();
+            foreach (Equipment equipment in reservation.equipmentList)
+            {
+                String commandLineEquipment = "INSERT INTO " + "reservationidlist" + " VALUES (" + equipment.equipmentID + "," + reservation.reservationID + " ');";
+                cmdEquipmentList.Add(new MySqlCommand(commandLineEquipment, conn));
+            }
+
             MySqlDataReader reader = null;
             try
             {
                 reader = cmd.ExecuteReader();
+                foreach(MySqlCommand ecmd in cmdEquipmentList)
+                {
+                    reader = ecmd.ExecuteReader();
+                }
             }
             catch(Exception e)
             {
@@ -320,7 +332,7 @@ namespace TDG
             {
                 reader = cmd.ExecuteReader();
             }
-            catch(Exception ex)
+            catch(Exception e)
             {
                 throw;
             }

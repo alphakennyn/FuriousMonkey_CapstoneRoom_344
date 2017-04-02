@@ -30,8 +30,8 @@ namespace Mappers
 
         }
 
-    // Get instance
-    public static EquipmentMapper getInstance()
+        // Get instance
+        public static EquipmentMapper getInstance()
         {
             return instance;
         }
@@ -52,21 +52,15 @@ namespace Mappers
             return nextID;
         }
 
-        /**
-         * Retrieve a TimeSlot given its TimeSlot ID.
-         */
-
         public void addEquipment(List<Equipment> newList)
         {
             tdgEquipment.addEquipment(newList);
-            EquipmentWaitsForMapper.refreshWaitsFor(newList);
         }
 
         // For Unit of Work: A list of timeslots to be updated to the DB is passed to the TDG. 
         public void updateTimeSlot(List<Equipment> updateList)
         {
             tdgEquipment.updateEquipment(updateList);
-            EquipmentWaitsForMapper.refreshWaitsFor(updateList);
         }
 
         //For Unit of Work : A list of timeslots to be deleted in the DB is passes to the TDG.
@@ -194,6 +188,5 @@ namespace Mappers
             // Register it to the unit of work
             UnitOfWork.getInstance().registerDirty(equipment);
         }
-
     }
 }

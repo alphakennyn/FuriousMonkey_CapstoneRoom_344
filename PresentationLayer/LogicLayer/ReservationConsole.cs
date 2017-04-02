@@ -583,7 +583,7 @@ namespace LogicLayer
             }
             if (equipmentIDList.Count() != equipmentNameList.Count())
             {
-                //something fucked up
+                //An equipment was no longer available
             }
 
             return equipmentIDList;

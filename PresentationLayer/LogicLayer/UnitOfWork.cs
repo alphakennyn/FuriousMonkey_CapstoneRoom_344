@@ -143,7 +143,7 @@ namespace LogicLayer
             if (timeSlotDeletedList.Count() != 0)
                 timeSlotMapper.deleteTimeSlot(timeSlotDeletedList);
 
-            if (timeSlotNewList.Count() != 0)
+            if (equipmentNewList.Count() != 0)
                 equipmentMapper.addequipment(equipmentNewList);
             if (timeSlotChangedList.Count() != 0)
                 equipmentMapper.updateequipment(equipmentChangedList);
