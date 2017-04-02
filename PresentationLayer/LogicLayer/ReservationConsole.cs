@@ -360,9 +360,9 @@ namespace LogicLayer
             for (int i = 0; i < TimeSlotMapper.getInstance().getListOfTimeSlots().Count; i++)
             {
                 // For those who are belonging to the reservation to be cancelled:
-                //if (directoryOfTimeSlots.timeSlotList[i].reservationID == reservationID)
                 if (TimeSlotMapper.getInstance().getListOfTimeSlots()[i].reservationID == reservationID) //make a method in mappers that returns the respective directory lists
                 {
+                    TimeSlot timeSlot = TimeSlotMapper.getInstance().getListOfTimeSlots()[i];
                     // If no one is waiting, delete it.
                     if (TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist.Count == 0)
                     {
@@ -370,7 +370,6 @@ namespace LogicLayer
                         i--;
                         TimeSlotMapper.getInstance().done();
                     }
-
                     // Otherwise:
                     // - Obtain the next in line, dequeue.
                     // - Make a new reservation (done - reservation)
@@ -378,33 +377,63 @@ namespace LogicLayer
                     // - Update the timeslot from old reservation to the new one. (done - timeslot)
                     else
                     {
-                        //int userID = directoryOfTimeSlots.timeSlotList[i].waitlist.Dequeue();
-                        for (int k = 0; k < TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist.Count; k++ )
+                        if(findCapstone(timeSlot).Count > 0) //if there are capstone students
                         {
-                            int userID = TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist.Dequeue();
-                            if (weeklyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(reservationID).date)
-                                && dailyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(reservationID).date,
-                                TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour, TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour))
+                            for(int j = 0; j < findCapstone(timeSlot).Count; j++)
                             {
-                                //get list of equipment
-                                List<Equipment> equipmentList = ReservationMapper.getInstance().getEquipmentFromTDG(reservationID);
-                                Reservation res = ReservationMapper.getInstance().makeNew(userID, ReservationMapper.getInstance().getReservation(reservationID).roomID,
-                             "", ReservationMapper.getInstance().getReservation(reservationID).date, equipmentList);
-                                ReservationMapper.getInstance().done();
-                                TimeSlotMapper.getInstance().setTimeSlot(TimeSlotMapper.getInstance().getListOfTimeSlots()[i].timeSlotID, res.reservationID,
-                                                                         TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist);
+                                int userID = findCapstone(timeSlot).Dequeue();
+                                //if they meet the constraints
+                                if(weeklyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(reservationID).date)
+                                   && dailyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(reservationID).date,
+                                   TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour, TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour))
+                                {
+                                    //get list of equipment
+                                    List<Equipment> equipmentList = ReservationMapper.getInstance().getEquipmentFromTDG(reservationID);
+                                    Reservation res = ReservationMapper.getInstance().makeNew(userID, ReservationMapper.getInstance().getReservation(reservationID).roomID,
+                                 "", ReservationMapper.getInstance().getReservation(reservationID).date, equipmentList);
+                                    ReservationMapper.getInstance().done();
+                                    TimeSlotMapper.getInstance().setTimeSlot(TimeSlotMapper.getInstance().getListOfTimeSlots()[i].timeSlotID, res.reservationID,
+                                                                             TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist);
 
-                                TimeSlotMapper.getInstance().done();
+                                    TimeSlotMapper.getInstance().done();
+                                    updateWaitList(userID, ReservationMapper.getInstance().getReservation(reservationID).date, TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour);
+                                    break;
+
+                                }
                                 updateWaitList(userID, ReservationMapper.getInstance().getReservation(reservationID).date, TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour);
-                                break;
+                                j--;
                             }
-                            updateWaitList(userID, ReservationMapper.getInstance().getReservation(reservationID).date, TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour);
-                            k--;
                         }
-                     
+                        else
+                        {
+                            for (int k = 0; k < TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist.Count; k++)
+                            {
+                                int userID = TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist.Dequeue();
+                                if (weeklyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(reservationID).date)
+                                    && dailyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(reservationID).date,
+                                    TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour, TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour))
+                                {
+                                    //get list of equipment
+                                    List<Equipment> equipmentList = ReservationMapper.getInstance().getEquipmentFromTDG(reservationID);
+                                    Reservation res = ReservationMapper.getInstance().makeNew(userID, ReservationMapper.getInstance().getReservation(reservationID).roomID,
+                                 "", ReservationMapper.getInstance().getReservation(reservationID).date, equipmentList);
+                                    ReservationMapper.getInstance().done();
+                                    TimeSlotMapper.getInstance().setTimeSlot(TimeSlotMapper.getInstance().getListOfTimeSlots()[i].timeSlotID, res.reservationID,
+                                                                             TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist);
+
+                                    TimeSlotMapper.getInstance().done();
+                                    updateWaitList(userID, ReservationMapper.getInstance().getReservation(reservationID).date, TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour);
+                                    break;
+
+                                }
+                                updateWaitList(userID, ReservationMapper.getInstance().getReservation(reservationID).date, TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour);
+                                k--;
+                            }
+                        }  
                     }
                 }
             }
+
 
             // Completely done with this reservation, delete it.
             ReservationMapper.getInstance().delete(reservationID);
@@ -412,6 +441,20 @@ namespace LogicLayer
             updateDirectories();
         }
 
+        public Queue<int> findCapstone(TimeSlot timeslot)
+        {
+            Queue<int> tempQueue = timeslot.waitlist;
+            Queue<int> newQueue = new Queue<int>();
+            for(int i = 0; i < timeslot.waitlist.Count; i++)
+            {
+                User tempUser = UserMapper.getInstance().getUser(tempQueue.Dequeue());
+                if (tempUser.inCapstone)
+                {
+                    newQueue.Enqueue(tempUser.userID);
+                }
+            }
+            return newQueue;
+        }
 
         public List<TimeSlot> getAllTimeSlots()
         {
@@ -480,11 +523,11 @@ namespace LogicLayer
         //}
 
         /**
-         * method for the constraint of not exceeding a reservation of 4 hours per day per person
+         * method for the constraint of not exceeding a reservation of 3 hours per day per person
          */
         public Boolean dailyConstraintCheck(int userID, DateTime date, int firstHour, int lastHour)
         {
-            //interval of hours for the desired reservvation
+            //interval of hours for the desired reservation
             int newHours = lastHour - firstHour + 1;
             //number of hours of reservation currently for chosen day
             List<int> result = ReservationMapper.getInstance().findReservationIDs(userID, date);
@@ -495,12 +538,13 @@ namespace LogicLayer
             }
             int currentHours = TimeSlotMapper.getInstance().findHoursByReservationID(result);
             //checks of reservation is possible according to constraint
-            if (currentHours + newHours <= 4)
+            if (currentHours + newHours <= 3)
             {
                 return true;
             }
             return false;
         }
+
 
         /**
          * method for the constraint of not exceeding 3 reservations per week per person
