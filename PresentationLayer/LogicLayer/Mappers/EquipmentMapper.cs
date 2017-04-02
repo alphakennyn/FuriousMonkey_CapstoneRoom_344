@@ -96,7 +96,7 @@ namespace Mappers
                 //Create an instance, add it to the equipment indentity map and to the return variable
                 if (!equipmentDic.ContainsKey(record.Key))
                 {
-                    Equipment equipment = DirectoryOfEquipment.getInstance().makeNewEquipment((int)record.Key, (int)record.Value[1], (string)record.Value[2].ToString());
+                    Equipment equipment = DirectoryOfEquipment.getInstance().makeNewEquipment((int)record.Key, (List<int>)record.Value[1], (string)record.Value[2].ToString());
 
                     // Add to IdentityMap
                     equipmentIdentityMap.addTo(equipment);
@@ -123,7 +123,7 @@ namespace Mappers
             //Loop through each of the result:
             foreach (KeyValuePair<int, Object[]> record in result)
             {
-                Equipment equipment = DirectoryOfEquipment.getInstance().makeNewEquipment((int)record.Key, (int)record.Value[2], (string)record.Value[1]);
+                Equipment equipment = DirectoryOfEquipment.getInstance().makeNewEquipment((int)record.Key, (List<int>)record.Value[2], (string)record.Value[1]);
 
                 // Add to IdentityMap
                 equipmentIdentityMap.addTo(equipment);
@@ -136,17 +136,25 @@ namespace Mappers
             //Try to obtain the TimeSlot from the TimeSlot identity map
             Equipment equipment = equipmentIdentityMap.find(equipmentID);
             Object[] result = null;
+            Object[] reservationIDso = null;
+            List<int> reservationIDs = null;
 
             if (equipment == null)
             {
                 //If not found in TimeSlot identity map then, it uses TDG to try to retrieve from DB.
                 result = tdgEquipment.get(equipmentID);
 
+                reservationIDso=tdgEquipment.getReservationIDs(equipmentID);
+                foreach(Object o in reservationIDso)
+                {
+                    reservationIDs.Add((int)o);
+                }
+
                 if (result != null)
                 {
                     //The TimeSlot object was obtained from the TDG (and from the DB)
                     //Instantiate the object by passing values to parameters
-                    DirectoryOfEquipment.getInstance().makeNewEquipment((int)result[0], (int)result[1], (int)result[2]);
+                    DirectoryOfEquipment.getInstance().makeNewEquipment((int)result[0],reservationIDs,(string)result[1]);
 
                     //Add TimeSlot to the TimeSlot IdentityMap
                     equipmentIdentityMap.addTo(equipment);
@@ -178,10 +186,10 @@ namespace Mappers
             return (DirectoryOfEquipment.getInstance().equipmentList);
         }
 
-        public void setEquipment(int equipmentID, int reservationID, Queue<int> equipmentWaitList)
+        public void setEquipment(int equipmentID, List<int> reservationIDList, Queue<int> equipmentWaitList)
         {
             // Update the timeslot
-            Equipment equipment = DirectoryOfEquipment.getInstance().modifyEquipment(equipmentID, reservationID, equipmentWaitList);
+            Equipment equipment = DirectoryOfEquipment.getInstance().modifyEquipment(equipmentID, reservationIDList, equipmentWaitList);
 
             // Register it to the unit of work
             UnitOfWork.getInstance().registerDirty(equipment);

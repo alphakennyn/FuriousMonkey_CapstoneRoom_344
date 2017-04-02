@@ -27,7 +27,7 @@ namespace LogicLayer
             equipmentList = new List<Equipment>();
         }
 
-        public Reservation(int reservationID, int userID, int roomID, string desc, DateTime date)
+        public Reservation(int reservationID, int userID, int roomID, string desc, DateTime date, List<Equipment> equipmentList)
         {
             this.reservationID = reservationID;
             this.description = desc;
@@ -35,7 +35,7 @@ namespace LogicLayer
             this.roomID = roomID;
             this.date = date;
             this.timeSlots = new List<TimeSlot>();
-            this.equipmentList = new List<Equipment>();
+            this.equipmentList = equipmentList;
         }
 
 

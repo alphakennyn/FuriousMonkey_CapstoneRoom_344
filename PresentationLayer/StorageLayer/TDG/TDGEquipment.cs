@@ -27,7 +27,7 @@ namespace TDG
         private const String TABLE_NAME = "equipment";
 
         // Field names of the table
-        private readonly String[] FIELDS = { "equipmentID", "equipmentName", "reservationIDList" };
+        private readonly String[] FIELDS = { "equipmentID", "equipmentName"};
 
         // Database server (localhost)
         private const String DATABASE_SERVER = "127.0.0.1";
@@ -179,6 +179,57 @@ namespace TDG
                     }
                     record[0] = reader[0];
                     record[1] = reader[1];
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+                conn.Close();
+            }
+
+            // Format and return the result
+            return record;
+        }
+
+
+        public Object[] getReservationIDs(int equipmentID)
+        {
+
+            MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
+            String commandLine = "SELECT reservationID FROM reservationidlist WHERE " + FIELDS[0] + " = " + equipmentID;
+            MySqlDataReader reader = null;
+            Object[] record = null; // to be returned
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+                reader = cmd.ExecuteReader();
+
+                // If no record is found, return null
+                if (!reader.HasRows)
+                {
+                    reader.Close();
+                    conn.Close();
+                    return null;
+                }
+
+                // There is only one result since we find it by id
+                record = new Object[1];
+                while (reader.Read())
+                {
+                    if (reader[0].GetType() == typeof(System.DBNull))
+                    {
+                        reader.Close();
+                        conn.Close();
+                        return null;
+                    }
+                    record[0] = reader[0];
                 }
             }
             catch (Exception ex)
