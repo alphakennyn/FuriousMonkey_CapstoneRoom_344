@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using PresentationLayer.Hubs;
 using Mappers;
+using PostSharp.Aspects;
 
 namespace LogicLayer
 {
@@ -31,6 +32,7 @@ namespace LogicLayer
         }
 
         //Method to make a reservation
+        [InterceptReservationAspect]
         public void makeReservation(int userID, int roomID, string desc, DateTime date, int firstHour, int lastHour)
         {
             List<int> hours = new List<int>();
@@ -472,5 +474,59 @@ namespace LogicLayer
             return false;
         }
 
+    }
+
+    [Serializable]
+    public class InterceptReservationAspect : MethodInterceptionAspect
+    {
+        public override void OnInvoke(MethodInterceptionArgs args)
+        {
+            int hourCount = 0;
+
+            //UserID and Datetime argument from method
+            int userId = (int)args.Arguments[0];
+            DateTime resDate = (DateTime)args.Arguments[3];
+            ReservationMapper resMap = ReservationMapper.getInstance();
+
+            foreach (DateTime dayBefore in EachDay(resDate.AddDays(-6), resDate)){
+                List<int> resIds = resMap.findReservationIDs(userId, dayBefore);
+                if (resIds != null)
+                {
+                    foreach (int resId in resIds)
+                    {
+                        Reservation res = resMap.getReservation(resId);
+                        hourCount += res.timeSlots.Count;
+                    }
+                }
+            }
+
+            foreach (DateTime dayAfter in EachDay(resDate, resDate.AddDays(6))){
+                List<int> resIds = resMap.findReservationIDs(userId, dayAfter);
+                if (resIds != null)
+                {
+                    foreach (int resId in resIds)
+                    {
+                        Reservation res = resMap.getReservation(resId);
+                        hourCount += res.timeSlots.Count;
+                    }
+                }
+            }
+
+            if (hourCount < 3)
+            {
+                //Method proceeds as normally expected
+                args.Proceed(); //Same as base.OnInvoke(args); 
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Weekly hour constraint has been met, reservation has not been made.");
+            }
+        }
+
+        public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+        {
+            for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+                yield return day;
+        }
     }
 }

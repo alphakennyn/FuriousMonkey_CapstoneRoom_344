@@ -138,7 +138,7 @@ function timeslotClicked(event) {
                     }
                     for (var i = firstAndLastTimeslot[0]; i <= firstAndLastTimeslot[1]; i++) {
                         //adds more timeslots to the already active tismeslots
-                        if ($("li[data-timeslot='" + i + "']li[data-room='" + room + "']").hasClass("active")) { }
+                        if ($("li[data-timeslot='" + i + "']li[data-room='" + room + "']").hasClass("active")) {/*do nothing*/}
                         else {
                             //toggles active the desired timesots
                             $("li[data-timeslot='" + i + "']li[data-room='" + room + "']").toggleClass("active");
@@ -425,7 +425,7 @@ $(".reservation-content").on('click', ".modifyReservation", function () {
 
 
 $(".reservation-tab").click(function () {
-    if ($(".reservation-tab").hasClass("active")) { }
+    if ($(".reservation-tab").hasClass("active")) {/*do nothing*/}
     else {
         $(".reservation-tab").toggleClass('active');
         $(".waitlist-tab").toggleClass('active');
@@ -436,7 +436,7 @@ $(".reservation-tab").click(function () {
 
 
 $(".waitlist-tab").click(function () {
-    if ($(".waitlist-tab").hasClass("active")) { }
+    if ($(".waitlist-tab").hasClass("active")) {/*do nothing*/}
     else {
         $(".waitlist-tab").toggleClass('active');
         $(".reservation-tab").toggleClass('active');
