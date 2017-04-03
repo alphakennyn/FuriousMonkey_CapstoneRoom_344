@@ -277,27 +277,24 @@ namespace TDG
             if(reservation == null)
                 return;
 
+            
             String mySqlDate = reservation.date.Date.ToString("yyyy-MM-dd");
             String commandLine = "INSERT INTO " + TABLE_NAME + " VALUES (" + reservation.reservationID + "," +
                 reservation.userID + "," + reservation.roomID + ",'" + reservation.description + "', '" +
                 mySqlDate + " ');";
 
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
-            List<MySqlCommand> cmdEquipmentList = new List<MySqlCommand>();
             foreach (Equipment equipment in reservation.equipmentList)
             {
-                String commandLineEquipment = "INSERT INTO " + "reservationidlist" + " VALUES (" + equipment.equipmentID + "," + reservation.reservationID + " ');";
-                cmdEquipmentList.Add(new MySqlCommand(commandLineEquipment, conn));
+                createEquipmentRes(conn,equipment, reservation.reservationID);
             }
 
             MySqlDataReader reader = null;
             try
             {
-                reader = cmd.ExecuteReader();
-                foreach(MySqlCommand ecmd in cmdEquipmentList)
-                {
-                    reader = ecmd.ExecuteReader();
-                }
+                
+                    reader = cmd.ExecuteReader();
+                reader.Read();
             }
             catch(Exception e)
             {
@@ -465,6 +462,30 @@ namespace TDG
 
             //Format and return the result
             return IDlist;
+        }
+        private void createEquipmentRes(MySqlConnection conn, Equipment equipment, int reservationID)
+        {
+            if (equipment == null)
+                return;
+            
+            String commandLine = "INSERT INTO " + "reservationidlist" + " VALUES (" + equipment.equipmentID + "," + reservationID + ");";
+            MySqlDataReader reader = null;
+            MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+
+            try
+            {
+                reader = cmd.ExecuteReader();
+                reader.Read();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+            }
         }
     }
 }

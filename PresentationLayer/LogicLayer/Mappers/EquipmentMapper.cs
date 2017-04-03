@@ -143,10 +143,10 @@ namespace Mappers
                 {
                     //The TimeSlot object was obtained from the TDG (and from the DB)
                     //Instantiate the object by passing values to parameters
-                    DirectoryOfEquipment.getInstance().makeNewEquipment((int)result[0],reservationIDs,(string)result[1]);
+                    equipment=DirectoryOfEquipment.getInstance().makeNewEquipment((int)result[0],reservationIDs,(string)result[1]);
 
                     //Add TimeSlot to the TimeSlot IdentityMap
-                    equipmentIdentityMap.addTo(equipment);
+                    EquipmentIdentityMap.getInstance().addTo(equipment);
                 }
             }
             //Null is returned if it is not found in the TimeSlot identity map NOR in the DB

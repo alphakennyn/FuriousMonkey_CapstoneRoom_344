@@ -363,6 +363,7 @@ namespace TDG
 
         /**
          * Adds one equipment to the database
+         * will not work cuz of reader
          */
         private void createEquipment(MySqlConnection conn, Equipment equipment)
         {
@@ -394,7 +395,8 @@ namespace TDG
             }
             finally
             {
-                reader.Close();
+                if (reader != null)
+                    reader.Close();
             }
         }
 

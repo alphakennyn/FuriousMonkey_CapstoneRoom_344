@@ -86,13 +86,13 @@ namespace LogicLayer
             }
 
             bool equipmentAvailable = true; //Will be used to track if equipment was available
-            List<int> availableEquipmentIDList;
+            List<int> availableEquipmentIDList=new List<int>();
             List<Equipment> equipmentList = new List<Equipment>();
             if (equipmentAvailable)
             {
                 availableEquipmentIDList = getAvailableEquipmentIDList(date, firstHour, lastHour, equipmentNameList);
-
-                foreach(int id in availableEquipmentIDList)
+                
+                foreach (int id in availableEquipmentIDList)
                 {
                     equipmentList.Add(EquipmentMapper.getInstance().getEquipment(id));
                 }
