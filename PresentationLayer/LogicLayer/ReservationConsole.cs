@@ -590,9 +590,9 @@ namespace LogicLayer
             {
                 foreach (Equipment equipment in equipmentList)   //Goes through all equipment objects
                 {
-                    bool isAvailable = true;
                     if (equipment.equipmentName == name)    //Comparing to all objects with matching name *e.g. to all computers
                     {
+                        bool isAvailable = true;
                         foreach (int resID in equipment.reservationIDList)  //go through each reservation ID in the matching equipment
                         {
                             foreach (Reservation reservation in reservationList) //go through every reservation
@@ -615,15 +615,13 @@ namespace LogicLayer
                                 }
                             }
                         }
-                    }
-
-                    if (isAvailable)
-                    {
-                        equipmentIDList.Add(equipment.equipmentID);
-                        break;
+                        if (isAvailable)
+                        {
+                            equipmentIDList.Add(equipment.equipmentID);
+                            break;
+                        }
                     }
                 }
-
             }
             if (equipmentIDList.Count() != equipmentNameList.Count())
             {
