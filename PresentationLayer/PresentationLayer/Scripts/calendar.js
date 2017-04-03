@@ -110,8 +110,8 @@ function timeslotClicked(event) {
         if ($(this).attr('data-room') == room) {
             //if timeslot selected at the begining or after the range
             if (firstAndLastTimeslot[1] <= timeslot2 ) {
-                if (timeslot2 - firstAndLastTimeslot[0] > 3) {
-                    firstAndLastTimeslot[1] = firstAndLastTimeslot[0] + 3;
+                if (timeslot2 - firstAndLastTimeslot[0] > 2) {
+                    firstAndLastTimeslot[1] = firstAndLastTimeslot[0] + 2;
                 }
                 else {
                     firstAndLastTimeslot[1] = timeslot2;
@@ -130,11 +130,11 @@ function timeslotClicked(event) {
                 //if timeslot is selected before the range
                 if (firstAndLastTimeslot[0] > timeslot2) {
 
-                    if (firstAndLastTimeslot[1] - timeslot2 <= 3) {
+                    if (firstAndLastTimeslot[1] - timeslot2 <= 2) {
                         firstAndLastTimeslot[0] = timeslot2;
                     }
                     else {
-                        firstAndLastTimeslot[0] = firstAndLastTimeslot[1] - 3;
+                        firstAndLastTimeslot[0] = firstAndLastTimeslot[1] - 2;
                     }
                     for (var i = firstAndLastTimeslot[0]; i <= firstAndLastTimeslot[1]; i++) {
                         //adds more timeslots to the already active tismeslots
