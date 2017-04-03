@@ -303,11 +303,11 @@ namespace TDG
             return records;
         }
 
-        /**
-         * Select all data from the table
-         * Returns it as a Dictionary<int, Object[]>
-         * Where int is the ID of the object and Object[] contains the record of the row
-         */
+        
+         //Select all data from the table
+         //Returns it as a Dictionary<int, Object[]>
+         //Where int is the ID of the object and Object[] contains the record of the row
+         
         public Dictionary<int, Object[]> getAll()
         {
             Dictionary<int, Object[]> records = new Dictionary<int, Object[]>();
@@ -339,9 +339,11 @@ namespace TDG
                         conn.Close();
                         return records;
                     }
-                    Object[] attributes = new Object[FIELDS.Length];
+                    Object[] attributes = new Object[FIELDS.Length+1];
                     attributes[0] = reader[0]; // equipmentID                                               
                     attributes[1] = reader[1]; // equipmentName
+                    attributes[2] = getReservationIDs((int)reader[0]); // reservationIDList
+
                     records.Add((int)reader[0], attributes);
                 }
             }
@@ -367,12 +369,24 @@ namespace TDG
             if (equipment == null)
                 return;
 
-            String commandLine = "INSERT INTO " + TABLE_NAME + " VALUES (" + equipment.equipmentID + ",'" + equipment.equipmentName + "');";
+            string commandLine = "INSERT INTO " + TABLE_NAME + " VALUES (" + equipment.equipmentID + ",'" + equipment.equipmentName + "');";
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+            List<MySqlCommand> cmdList = new List<MySqlCommand>();
+            List<int> reservationIDList = getReservationIDs(equipment.equipmentID);
+
+            foreach (int resID in reservationIDList)
+            {
+                cmdList.Add(new MySqlCommand(("INSERT INTO " + "reservationidlist" + " VALUES (" + equipment.equipmentID + ",'" + resID + "');"), conn));
+            }
+
             MySqlDataReader reader = null;
             try
             {
                 reader = cmd.ExecuteReader();
+                foreach(MySqlCommand command in cmdList)
+                {
+                    reader = command.ExecuteReader();
+                }
             }
             catch (Exception ex)
             {
@@ -419,12 +433,15 @@ namespace TDG
                 return;
 
             String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + equipment.equipmentID + ";";
+            string commandLine2 = "DELETE FROM " + "reservationidlist" + " WHERE " + FIELDS[0] + "=" + equipment.equipmentID + ";";
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+            MySqlCommand cmd2 = new MySqlCommand(commandLine2, conn);
             MySqlDataReader reader = null;
 
             try
             {
-                reader = cmd.ExecuteReader();
+                reader = cmd.ExecuteReader();   //deletes from equipmentList
+                reader = cmd2.ExecuteReader();  //deletes any corresponding reservations from reservationIDList
             }
             catch (Exception ex)
             {
@@ -482,56 +499,56 @@ namespace TDG
                 return -2;
         }
 
-        public Dictionary<int, Object[]> findAvailableEquipment(DateTime date, int firstHour,int lastHour, List<string> equipmentNameList)
-        {
-            Dictionary<int, Object[]> records = new Dictionary<int, Object[]>();
-            MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
-            String commandLine = "SELECT * FROM " + TABLE_NAME + " WHERE 1;";
-            MySqlDataReader reader = null;
+        //public Dictionary<int, Object[]> findAvailableEquipment(DateTime date, int firstHour,int lastHour, List<string> equipmentNameList)
+        //{
+        //    Dictionary<int, Object[]> records = new Dictionary<int, Object[]>();
+        //    MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
+        //    String commandLine = "SELECT * FROM " + TABLE_NAME + " WHERE 1;";
+        //    MySqlDataReader reader = null;
 
-            try
-            {
-                conn.Open();
+        //    try
+        //    {
+        //        conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand(commandLine, conn);
-                reader = cmd.ExecuteReader();
+        //        MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+        //        reader = cmd.ExecuteReader();
 
-                // If no record is found, return empty records
-                if (!reader.HasRows)
-                {
-                    reader.Close();
-                    conn.Close();
-                    return records;
-                }
+        //        // If no record is found, return empty records
+        //        if (!reader.HasRows)
+        //        {
+        //            reader.Close();
+        //            conn.Close();
+        //            return records;
+        //        }
 
-                // For each reader, add it to the dictionary
-                while (reader.Read())
-                {
-                    if (reader[0].GetType() == typeof(System.DBNull))
-                    {
-                        reader.Close();
-                        conn.Close();
-                        return records;
-                    }
-                    Object[] attributes = new Object[FIELDS.Length];
-                    attributes[0] = reader[0]; // equipmentID                                               
-                    attributes[1] = reader[1]; // equipmentName
-                    attributes[2] = reader[2]; //reservationID
-                    records.Add((int)reader[0], attributes);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-                conn.Close();
-            }
+        //        // For each reader, add it to the dictionary
+        //        while (reader.Read())
+        //        {
+        //            if (reader[0].GetType() == typeof(System.DBNull))
+        //            {
+        //                reader.Close();
+        //                conn.Close();
+        //                return records;
+        //            }
+        //            Object[] attributes = new Object[FIELDS.Length];
+        //            attributes[0] = reader[0]; // equipmentID                                               
+        //            attributes[1] = reader[1]; // equipmentName
+        //            attributes[2] = reader[2]; //reservationIDList
+        //            records.Add((int)reader[0], attributes);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        if (reader != null)
+        //            reader.Close();
+        //        conn.Close();
+        //    }
 
-            return records;
-        }
+        //    return records;
+        //}
     }
 }
