@@ -321,7 +321,7 @@ namespace TDG
 
                 MySqlCommand cmd = new MySqlCommand(commandLine, conn);
                 reader = cmd.ExecuteReader();
-
+                //Break Point Here, check contents of reader ******
                 // If no record is found, return empty records
                 if (!reader.HasRows)
                 {

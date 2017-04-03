@@ -75,7 +75,7 @@ namespace Mappers
             Dictionary<int, Equipment> equipmentDic = equipmentIdentityMap.findAll();
 
             //Get all timeslots in the DB
-            Dictionary<int, Object[]> result = tdgEquipment.getAll();
+            Dictionary<int, Object[]> result = TDGEquipment.getInstance().getAll();
 
             // If it's empty, simply return those from the identity map
             if (result == null)
