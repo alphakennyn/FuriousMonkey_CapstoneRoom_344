@@ -137,7 +137,7 @@ namespace Mappers
                 //If not found in TimeSlot identity map then, it uses TDG to try to retrieve from DB.
                 result = tdgEquipment.get(equipmentID);
 
-                reservationIDs=tdgEquipment.getReservationIDs(equipmentID);
+                reservationIDs=TDGEquipment.getInstance().getReservationIDs(equipmentID);
 
                 if (result != null)
                 {

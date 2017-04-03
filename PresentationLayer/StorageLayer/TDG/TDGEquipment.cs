@@ -312,7 +312,7 @@ namespace TDG
         {
             Dictionary<int, Object[]> records = new Dictionary<int, Object[]>();
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
-            String commandLine = "SELECT * FROM " + TABLE_NAME + " WHERE 1;";
+            string commandLine = "SELECT * FROM " + TABLE_NAME + " WHERE 1;";
             MySqlDataReader reader = null;
 
             try
@@ -321,7 +321,7 @@ namespace TDG
 
                 MySqlCommand cmd = new MySqlCommand(commandLine, conn);
                 reader = cmd.ExecuteReader();
-                //Break Point Here, check contents of reader ******
+
                 // If no record is found, return empty records
                 if (!reader.HasRows)
                 {
@@ -342,7 +342,6 @@ namespace TDG
                     Object[] attributes = new Object[FIELDS.Length];
                     attributes[0] = reader[0]; // equipmentID                                               
                     attributes[1] = reader[1]; // equipmentName
-                    attributes[2] = reader[2]; //reservationID
                     records.Add((int)reader[0], attributes);
                 }
             }

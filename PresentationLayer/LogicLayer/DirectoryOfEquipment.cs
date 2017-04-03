@@ -24,7 +24,7 @@ namespace LogicLayer
             return instance;
         }
 
-        // Method to make a new time slot
+        // Method to make a new equipment
         public Equipment makeNewEquipment(int equipmentID, List<int> reservationIDList, string equipmentName)
         {
             Equipment equipment = new Equipment(equipmentID, reservationIDList, equipmentName);

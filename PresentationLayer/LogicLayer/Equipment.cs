@@ -17,7 +17,7 @@ namespace LogicLayer
         public Equipment()
         {
             equipmentID = 0;
-            equipmentName = "";
+            equipmentName = "computer";
             reservationIDList = new List<int>();
         }
 
