@@ -219,6 +219,7 @@ namespace LogicLayer
             foreach(KeyValuePair<int, List<string>> user in userDictionary) //Do for capstone students first
             {
                 User userObject = UserMapper.getInstance().getUser(user.Key);
+
                 if (userObject.inCapstone == true)
                 {
                     DateTime date = DateTime.Now;

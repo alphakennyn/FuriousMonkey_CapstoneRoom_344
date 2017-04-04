@@ -46,7 +46,7 @@ namespace Mappers
                     return user;
                 }
             }
-            return null; //so all code paths return a value
+            return user; //so all code paths return a value
         }
 
 

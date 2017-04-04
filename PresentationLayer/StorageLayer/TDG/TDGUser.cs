@@ -109,8 +109,7 @@ namespace TDG
        */
         public Object[] get(int userID)
         {
-            String commandLine = "SELECT * FROM " + TABLE_NAME + " \n" +
-                    " WHERE " + FIELDS[0] + "=" + userID + ";";
+            String commandLine = "SELECT * FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + userID;
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
             MySqlDataReader reader = null;
             Object[] record = null; // to be returned
