@@ -62,10 +62,10 @@ namespace TDG
          * Returns it as a List<int>
          * Where int is the ID of the object and Object[] contains the record of the row
          */
-        public List<int> getAllUsers(int equipmentName)
+        public List<Object[]> getAll()
         {
-            List<int> listOfUsers = new List<int>();
-            String commandLine = "SELECT " + FIELDS[1] + " FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + equipmentName + " ORDER BY " + FIELDS[2] + ";";
+            List<Object[]> records = new List<Object[]>();
+            String commandLine = "SELECT * FROM " + TABLE_NAME + " WHERE 1;";
             MySqlDataReader reader = null;
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
 
@@ -81,19 +81,27 @@ namespace TDG
                 {
                     reader.Close();
                     conn.Close();
-                    return listOfUsers;
+                    return records;
                 }
 
-                // For each reader, add it to the dictionary
+                // For each reader, add it to the list
                 while (reader.Read())
                 {
                     if (reader[0].GetType() == typeof(System.DBNull))
                     {
                         reader.Close();
                         conn.Close();
-                        return listOfUsers;
+                        return records;
                     }
-                    listOfUsers.Add((int)reader[0]); // Selecting only the userID
+                    Object[] attributes = new Object[FIELDS.Length];
+                    attributes[0] = reader[0]; //equipmentName
+                    attributes[1] = reader[1]; //userID
+                    attributes[2] = reader[2]; //date
+                    attributes[3] = reader[3]; //firstHour
+                    attributes[4] = reader[4]; //lastHour
+                    attributes[5] = reader[5]; //roomID
+
+                    records.Add(attributes);
                 }
             }
             catch(Exception e)
@@ -108,7 +116,7 @@ namespace TDG
             }
 
             // If successful, return the list
-            return listOfUsers;
+            return records;
         }
 
         public void refreshEquipmentWaitsFor(List<Equipment> listOfEquipment)

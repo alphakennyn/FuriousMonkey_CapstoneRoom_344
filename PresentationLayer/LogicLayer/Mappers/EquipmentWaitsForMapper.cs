@@ -20,9 +20,9 @@ namespace Mappers
             return instance;
         }
 
-        public List<int> getAllUsers(int timeSlotID)
+        public List<Object[]> getAll()
         {
-            return tdgEquipmentWaitsFor.getAllUsers(timeSlotID);
+            return tdgEquipmentWaitsFor.getAll();
         }
 
         public void refreshWaitsFor(List<Equipment> refreshList)

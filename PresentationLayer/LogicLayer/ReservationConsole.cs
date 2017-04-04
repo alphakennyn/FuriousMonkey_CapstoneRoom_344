@@ -191,6 +191,17 @@ namespace LogicLayer
             TimeSlotMapper.getInstance().done();
         }
 
+        public void updateEquipmentWaitList()
+        {
+            List <Object[]> waitingUsers = EquipmentWaitsForMapper.getInstance().getAll(); //get all objects in equipmentWaitsFor
+            foreach(Object waitingUser in waitingUsers)
+            {
+                //do stuff
+
+
+            }
+        }
+
         // Method to modify a reservation
         public void modifyReservation(int resID, int roomID, string desc, DateTime date, int firstHour, int lastHour)
         {

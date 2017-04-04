@@ -113,15 +113,6 @@ namespace LogicLayer
         public void commit()
         {
 
-            // To be verified with respective mappers
-            //if (userNewList.Count() != 0)
-            //userMapper.AddUser(userNewList); 
-            //prof doesn't want add users in our case
-            //if (userChangedList.Count() != 0)
-            //    userMapper.updateUser(userChangedList);
-            //if (userDeletedList.Count() != 0)
-            //    userMapper.deleteUser(userDeletedList);
-
             if (reservationNewList.Count() != 0)
                 reservationMapper.addReservation(reservationNewList);
             if (reservationChangedList.Count() != 0)
@@ -143,13 +134,6 @@ namespace LogicLayer
             if (timeSlotDeletedList.Count() != 0)
                 timeSlotMapper.deleteTimeSlot(timeSlotDeletedList);
 
-            if (equipmentNewList.Count() != 0)
-               // equipmentMapper.addequipment(equipmentNewList);
-            if (timeSlotChangedList.Count() != 0)
-                //equipmentMapper.updateequipment(equipmentChangedList);
-            if (timeSlotDeletedList.Count() != 0)
-                //equipmentMapper.deleteequipment(equipmentDeletedList);
-
             //Empty the lists after the Commit.
             userDeletedList.Clear();
             userChangedList.Clear();
@@ -163,9 +147,6 @@ namespace LogicLayer
             timeSlotNewList.Clear();
             timeSlotChangedList.Clear();
             timeSlotDeletedList.Clear();
-            equipmentNewList.Clear();
-            equipmentChangedList.Clear();
-            equipmentDeletedList.Clear();
         }
     }
 }
