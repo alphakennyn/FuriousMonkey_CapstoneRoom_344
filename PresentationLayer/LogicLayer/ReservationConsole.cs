@@ -41,6 +41,7 @@ namespace LogicLayer
             //foreach (Reservation reservation in directoryOfReservations.reservationList)
             foreach (Reservation reservation in ReservationMapper.getInstance().getListOfReservations())    //Goes through all reservations in listOfReservations
             {
+                /*
 
                 //The equipment handling and its waitlist ***********EQUIPMENT WAITLIST WILL BE HANDLED IN THIS SECTION**********
                 if (reservation.date.Date == date.Date) //Checks each reservation with a matching date to the date selected
@@ -62,7 +63,7 @@ namespace LogicLayer
                             }
                         }
                     }
-                }
+                }*/
 
                 // Compare if the date (not the time portion) are the same and the rooms are the same
                 if (reservation.date.Date == date.Date && reservation.roomID == roomID)
@@ -448,7 +449,7 @@ namespace LogicLayer
             for(int i = 0; i < timeslot.waitlist.Count; i++)
             {
                 User tempUser = UserMapper.getInstance().getUser(tempQueue.Dequeue());
-                if (tempUser.inCapstone)
+                if (tempUser != null && tempUser.inCapstone)
                 {
                     newQueue.Enqueue(tempUser.userID);
                 }

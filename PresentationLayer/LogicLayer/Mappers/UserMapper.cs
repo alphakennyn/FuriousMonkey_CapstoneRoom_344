@@ -41,7 +41,7 @@ namespace Mappers
                 else
                 {
                     // We got the user from the TDG who got it from the DB and now the mapper must add it to the UserIdentityMap
-                    user = new User((int)result[0], (String)result[1], (String)result[2], (String)result[3]);
+                    user = new User((int)result[0], (String)result[1], (String)result[2], (String)result[3], (Boolean)result[4]);
                     UserIdentityMap.getInstance().addTo(user);
                     return user;
                 }
@@ -73,7 +73,7 @@ namespace Mappers
                 // The user is not in the identity map. Create an instance, add it to identity map and to the return variable
                 if (!users.ContainsKey(record.Key))
                 {
-                    User user = UserCatalog.getInstance().makeNewUser((int)record.Key, (String)record.Value[1], (String)record.Value[2], (String)record.Value[3]);
+                    User user = UserCatalog.getInstance().makeNewUser((int)record.Key, (String)record.Value[1], (String)record.Value[2], (String)record.Value[3], (Boolean)record.Value[4]);
                     UserIdentityMap.getInstance().addTo(user);
                     users.Add(user.userID, user);
                 }
@@ -93,7 +93,7 @@ namespace Mappers
             //Loop through each of the result:
             foreach (KeyValuePair<int, Object[]> record in result)
             {
-                User user = UserCatalog.getInstance().makeNewUser((int)record.Key, (String)record.Value[1], (String)record.Value[2], (String)record.Value[3]);
+                User user = UserCatalog.getInstance().makeNewUser((int)record.Key, (String)record.Value[1], (String)record.Value[2], (String)record.Value[3], (Boolean)record.Value[4]);
                 UserIdentityMap.getInstance().addTo(user);
             }
         }
