@@ -530,6 +530,8 @@ namespace LogicLayer
             List<int> twoWeeksAgoRes = resMap.findReservationIDs(curUserId, curResDate.AddDays(-14));
             List<int> oneWeekAgoRes = resMap.findReservationIDs(curUserId, curResDate.AddDays(-7));
 
+            //Check the last 3 weeks for the same reservation that is currently being made
+            //If the same reservation has been made, stop it from being made on the 4th week
             if (oneWeekAgoRes != null && twoWeeksAgoRes != null && threeWeeksAgoRes != null)
             {
                 Boolean oneAgo = false, twoAgo = false, threeAgo = false;
