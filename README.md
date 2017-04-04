@@ -25,4 +25,13 @@ Do git clone and open the .sln file in visual studio.We are using MVC5 It's wind
 6. [First time]: Run the query.
 7. [First time]: Repeat steps 6 and 7 for room_sampledata.sql and user_sampledata.sql.
 
+### New UPDATE
+
+Since the new update, a new plugin needs to be installed on first use.
+
+1. From Visual Studio, click Tools
+2. Click Extensions and Updates...
+3. On the left side panel, click Online
+4. Search for PostSharp
+5. This opens browser, then you download and install based on their instructions
 
