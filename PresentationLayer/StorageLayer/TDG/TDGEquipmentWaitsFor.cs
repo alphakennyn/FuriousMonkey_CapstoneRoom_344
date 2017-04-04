@@ -223,7 +223,7 @@ namespace TDG
 
         private void createEquipmentWaitsFor(MySqlConnection conn, string equipmentName, int userID, string currentDateTime, int firstHour, int lastHour)
         {
-            String commandLine = "INSERT INTO " + TABLE_NAME + " VALUES ( " + equipmentName + "," + userID + ", '" + currentDateTime + "," + firstHour + "," + lastHour + "');";
+            String commandLine = "INSERT INTO " + TABLE_NAME + " VALUES ( '" + equipmentName + "'," + userID + ", '" + currentDateTime + "'," + firstHour + "," + lastHour + ");";
             MySqlDataReader reader = null;
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
             try
