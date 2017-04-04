@@ -14,6 +14,7 @@ namespace LogicLayer
         public int reservationID { get; set; }
         public string description { get; set; }
         public List<TimeSlot> timeSlots { get; set; }
+        public List<Equipment> equipmentList { get; set; }
 
         public Reservation()
         {
@@ -22,10 +23,11 @@ namespace LogicLayer
             userID = 0;
             roomID = 0;
             date = new DateTime(); //default constructor will set the date of the reservation as the current day
-            timeSlots = new List<TimeSlot>(); 
+            timeSlots = new List<TimeSlot>();
+            equipmentList = new List<Equipment>();
         }
 
-        public Reservation(int reservationID, int userID, int roomID, string desc, DateTime date)
+        public Reservation(int reservationID, int userID, int roomID, string desc, DateTime date, List<Equipment> equipmentList)
         {
             this.reservationID = reservationID;
             this.description = desc;
@@ -33,9 +35,7 @@ namespace LogicLayer
             this.roomID = roomID;
             this.date = date;
             this.timeSlots = new List<TimeSlot>();
+            this.equipmentList = equipmentList;
         }
-
-
-
     }
 }

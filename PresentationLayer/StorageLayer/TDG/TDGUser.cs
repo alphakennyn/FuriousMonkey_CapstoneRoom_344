@@ -25,7 +25,7 @@ namespace TDG
         private static TDGUser instance = new TDGUser();
 
         // Field names of the table
-        private static readonly String[] FIELDS = { "userID", "username", "password", "name" };
+        private static readonly String[] FIELDS = { "userID", "username", "password", "name", "inCapstone" };
         
         // Database server (localhost)
         private const String DATABASE_SERVER = "127.0.0.1";
@@ -86,7 +86,7 @@ namespace TDG
 
             String commandLine = "UPDATE " + TABLE_NAME + " \n" +
                    "SET " + FIELDS[1] + "='" + user.username + "'," + FIELDS[2] + "='" + user.password + "'," +
-                   FIELDS[3] + "='" + user.name + ";\n" +
+                    FIELDS[3] + "='" + user.name + FIELDS[4] + "='" + user.inCapstone + ";\n" +
                    " WHERE " + FIELDS[0] + "=" + user.userID + ";";
             MySqlDataReader reader = null;
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
@@ -109,8 +109,7 @@ namespace TDG
        */
         public Object[] get(int userID)
         {
-            String commandLine = "SELECT * FROM " + TABLE_NAME + " \n" +
-                    " WHERE " + FIELDS[0] + "=" + userID + ";";
+            String commandLine = "SELECT * FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + userID;
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
             MySqlDataReader reader = null;
             Object[] record = null; // to be returned
@@ -142,7 +141,7 @@ namespace TDG
                     record[1] = reader[1];
                     record[2] = reader[2];
                     record[3] = reader[3];
-
+                    record[4] = reader[4];
                 }
             }
             catch(Exception ex)
@@ -204,6 +203,7 @@ namespace TDG
                     attributes[1] = reader[1]; // userName
                     attributes[2] = reader[2]; // password
                     attributes[3] = reader[3]; // name
+                    attributes[4] = reader[4]; // inCapstone 
                     records.Add((int)reader[0], attributes);
                 }
             }

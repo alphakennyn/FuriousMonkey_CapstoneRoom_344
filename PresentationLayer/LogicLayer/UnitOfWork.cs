@@ -29,10 +29,16 @@ namespace LogicLayer
         private List<TimeSlot> timeSlotDeletedList = new List<TimeSlot>();
         private List<TimeSlot> timeSlotChangedList = new List<TimeSlot>();
 
+        private List<Equipment> equipmentNewList = new List<Equipment>();
+        private List<Equipment> equipmentDeletedList = new List<Equipment>();
+        private List<Equipment> equipmentChangedList = new List<Equipment>();
+
         UserMapper userMapper = UserMapper.getInstance();
         RoomMapper roomMapper = RoomMapper.getInstance();
         ReservationMapper reservationMapper = ReservationMapper.getInstance();
         TimeSlotMapper timeSlotMapper = TimeSlotMapper.getInstance();
+        EquipmentMapper equipmentMapper = EquipmentMapper.getInstance();
+
         private UnitOfWork() { }
 
         public static UnitOfWork getInstance()
@@ -90,17 +96,22 @@ namespace LogicLayer
             timeSlotChangedList.Add(timeslot);
         }
 
+        public void registerNew(Equipment equipment)
+        {
+            equipmentNewList.Add(equipment);
+        }
+
+        public void registerDeleted(Equipment equipment)
+        {
+            equipmentDeletedList.Add(equipment);
+        }
+
+        public void registerDirty(Equipment equipment)
+        {
+            equipmentChangedList.Add(equipment);
+        }
         public void commit()
         {
-
-            // To be verified with respective mappers
-            //if (userNewList.Count() != 0)
-            //userMapper.AddUser(userNewList); 
-            //prof doesn't want add users in our case
-            //if (userChangedList.Count() != 0)
-            //    userMapper.updateUser(userChangedList);
-            //if (userDeletedList.Count() != 0)
-            //    userMapper.deleteUser(userDeletedList);
 
             if (reservationNewList.Count() != 0)
                 reservationMapper.addReservation(reservationNewList);

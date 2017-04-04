@@ -13,9 +13,6 @@ namespace LogicLayer
         public int userID { get; set; }
         public string name { get; set; }
         public Boolean inCapstone { get; set; }
-        public int numOfReservations { get; set; }
-        public int hoursReservedInWeek { get; set; }
-        
         public string username { get; set; }
         public string password { get; set; }
 
@@ -26,16 +23,15 @@ namespace LogicLayer
             password = "";
             name = "";
             inCapstone = false;
-            numOfReservations = 0;
-            hoursReservedInWeek = 0;
         }
 
-        public User (int idnumber, string un, string pw, string n)
+        public User (int idnumber, string un, string pw, string n, Boolean cap)
         {
             this.userID = idnumber;
             this.username = un;
             this.password = pw; 
             this.name = n;
+            this.inCapstone = cap;
         }
 
     }

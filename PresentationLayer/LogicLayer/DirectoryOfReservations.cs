@@ -11,6 +11,7 @@ namespace LogicLayer
         private static DirectoryOfReservations instance = new DirectoryOfReservations();
         
         public List<Reservation> reservationList { get; set; }
+       
 
         // Constructor
         private DirectoryOfReservations()
@@ -25,12 +26,13 @@ namespace LogicLayer
         }
 
         // Method to make a new reservation
-        public Reservation makeNewReservation(int reservationID, int userID, int roomID, string desc, DateTime date)
+        public Reservation makeNewReservation(int reservationID, int userID, int roomID, string desc, DateTime date, List<Equipment> equipmentList)
         {
-            Reservation reservation = new Reservation(reservationID, userID, roomID, desc, date);
+
+            Reservation reservation = new Reservation(reservationID, userID, roomID, desc, date, equipmentList);
 
             reservationList.Add(reservation);
-
+            DirectoryOfEquipment.getInstance().addToReservationIDList(equipmentList, reservationID);
             return reservation;
         }
 

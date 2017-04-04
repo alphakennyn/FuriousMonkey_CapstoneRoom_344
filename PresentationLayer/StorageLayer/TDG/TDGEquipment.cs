@@ -27,7 +27,7 @@ namespace TDG
         private const String TABLE_NAME = "equipment";
 
         // Field names of the table
-        private readonly String[] FIELDS = { "EquipmentID", "EquipmentNum" };
+        private readonly String[] FIELDS = { "equipmentID", "equipmentName"};
 
         // Database server (localhost)
         private const String DATABASE_SERVER = "127.0.0.1";
@@ -71,7 +71,7 @@ namespace TDG
         {
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
 
-            // Attempt to open the connection and create many reservations
+            // Attempt to open the connection and create many equipmentss
             try
             {
                 conn.Open();
@@ -97,7 +97,7 @@ namespace TDG
         {
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
 
-            // Attempt to open the connection and create many reservations
+            // Attempt to open the connection and create many equipments
             try
             {
                 conn.Open();
@@ -119,11 +119,11 @@ namespace TDG
         /**
          * Delete equipment(s) from the database
          */
-        public void deleteEquipmment(List<Equipment> deleteList)
+        public void deleteEquipment(List<Equipment> deleteList)
         {
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
 
-            // Attempt to open the connection and create many reservations
+            // Attempt to open the connection and create many equipments
             try
             {
                 conn.Open();
@@ -196,16 +196,123 @@ namespace TDG
             return record;
         }
 
-        /**
-         * Select all data from the table
-         * Returns it as a Dictionary<int, Object[]>
-         * Where int is the ID of the object and Object[] contains the record of the row
-         */
+
+        public List<int> getEquipmentIDs(int reservationID)
+        {
+            MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
+            String commandLine = "SELECT " + "equipmentID" + " FROM " + "reservationidlist" + " WHERE " + "reservationID" + " = " + reservationID;
+            List<int> records = new List<int>();
+            MySqlDataReader reader = null;
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+                reader = cmd.ExecuteReader();
+
+                //If no record is found, return empty records
+                if (!reader.HasRows)
+                {
+                    reader.Close();
+                    conn.Close();
+                    return records;
+
+                }
+
+                //For each reader, add it to the list
+                while (reader.Read())
+                {
+                    if (reader[0].GetType() == typeof(System.DBNull))
+                    {
+                        reader.Close();
+                        conn.Close();
+                        return records;
+                    }
+
+                    int id;
+                    id = (int)reader[0]; //equipmentID
+
+                    records.Add(id);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+                conn.Close();
+            }
+
+            //Format and return the result
+            return records;
+        }
+
+        public List<int> getReservationIDs(int equipmentID)
+        {
+            MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
+            String commandLine = "SELECT " + "reservationID" + " FROM " + "reservationidlist" + " WHERE " + "equipmentID" + " = " + equipmentID;
+            List<int> records = new List<int>();
+            MySqlDataReader reader = null;
+
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+                reader = cmd.ExecuteReader();
+
+                //If no record is found, return empty records
+                if (!reader.HasRows)
+                {
+                    reader.Close();
+                    conn.Close();
+                    return records;
+
+                }
+
+                //For each reader, add it to the list
+                while (reader.Read())
+                {
+                    if (reader[0].GetType() == typeof(System.DBNull))
+                    {
+                        reader.Close();
+                        conn.Close();
+                        return records;
+                    }
+
+                    int id;
+                    id = (int)reader[0]; //equipmentID
+
+                    records.Add(id);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+                conn.Close();
+            }
+
+            //Format and return the result
+            return records;
+        }
+
+        
+         //Select all data from the table
+         //Returns it as a Dictionary<int, Object[]>
+         //Where int is the ID of the object and Object[] contains the record of the row
+         
         public Dictionary<int, Object[]> getAll()
         {
             Dictionary<int, Object[]> records = new Dictionary<int, Object[]>();
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
-            String commandLine = "SELECT * FROM " + TABLE_NAME + " WHERE 1;";
+            string commandLine = "SELECT * FROM " + TABLE_NAME + " WHERE 1;";
             MySqlDataReader reader = null;
 
             try
@@ -232,9 +339,11 @@ namespace TDG
                         conn.Close();
                         return records;
                     }
-                    Object[] attributes = new Object[FIELDS.Length];
-                    attributes[0] = reader[0]; // equipmentID                                                 UPDATE THIS MAYBE?
-                    attributes[1] = reader[1]; // equipmentNum
+                    Object[] attributes = new Object[FIELDS.Length+1];
+                    attributes[0] = reader[0]; // equipmentID                                               
+                    attributes[1] = reader[1]; // equipmentName
+                    attributes[2] = getReservationIDs((int)reader[0]); // reservationIDList
+
                     records.Add((int)reader[0], attributes);
                 }
             }
@@ -254,18 +363,31 @@ namespace TDG
 
         /**
          * Adds one equipment to the database
+         * will not work cuz of reader
          */
         private void createEquipment(MySqlConnection conn, Equipment equipment)
         {
             if (equipment == null)
                 return;
 
-            String commandLine = "INSERT INTO " + TABLE_NAME + " VALUES (" + equipment.equipmentID + ",'" + equipment.equipmentName + "');";
+            string commandLine = "INSERT INTO " + TABLE_NAME + " VALUES (" + equipment.equipmentID + ",'" + equipment.equipmentName + "');";
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+            List<MySqlCommand> cmdList = new List<MySqlCommand>();
+            List<int> reservationIDList = getReservationIDs(equipment.equipmentID);
+
+            foreach (int resID in reservationIDList)
+            {
+                cmdList.Add(new MySqlCommand(("INSERT INTO " + "reservationidlist" + " VALUES (" + equipment.equipmentID + ",'" + resID + "');"), conn));
+            }
+
             MySqlDataReader reader = null;
             try
             {
                 reader = cmd.ExecuteReader();
+                foreach(MySqlCommand command in cmdList)
+                {
+                    reader = command.ExecuteReader();
+                }
             }
             catch (Exception ex)
             {
@@ -273,7 +395,8 @@ namespace TDG
             }
             finally
             {
-                reader.Close();
+                if (reader != null)
+                    reader.Close();
             }
         }
 
@@ -312,12 +435,15 @@ namespace TDG
                 return;
 
             String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + equipment.equipmentID + ";";
+            string commandLine2 = "DELETE FROM " + "reservationidlist" + " WHERE " + FIELDS[0] + "=" + equipment.equipmentID + ";";
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+            MySqlCommand cmd2 = new MySqlCommand(commandLine2, conn);
             MySqlDataReader reader = null;
 
             try
             {
-                reader = cmd.ExecuteReader();
+                reader = cmd.ExecuteReader();   //deletes from equipmentList
+                reader = cmd2.ExecuteReader();  //deletes any corresponding reservations from reservationIDList
             }
             catch (Exception ex)
             {
