@@ -128,7 +128,7 @@ namespace TDG
                 if (equipment.equipmentWaitList.Count() != 0)
                 {
                     // Obtain all queuery for that equipment from the database
-                    String commandLine = "SELECT " + FIELDS[1] + " FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + equipment.equipmentName;
+                    String commandLine = "SELECT " + FIELDS[1] + " FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + equipment.equipmentName + ";";
                     MySqlDataReader reader = null;
                     MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
 
@@ -184,7 +184,7 @@ namespace TDG
                 // If the queue is empty, ensure it is empty by deleting all rows that have that equipment id
                 else
                 {
-                    String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + " = " + equipment.equipmentID;
+                    String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + " = " + equipment.equipmentID + ";";
                     MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
                     MySqlDataReader reader = null;
 
@@ -250,7 +250,7 @@ namespace TDG
         }
         private void deleteWaitsFor(MySqlConnection conn, int equipmentName, int userID)
         {
-            String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + equipmentName + " AND " + FIELDS[1] + " = " + userID;
+            String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + equipmentName + " AND " + FIELDS[1] + " = " + userID + ";";
             MySqlDataReader reader = null;
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
             try
