@@ -353,7 +353,8 @@ namespace TDG
             String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + reservation.reservationID + ";";
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
             MySqlDataReader reader = null;
-
+            removeEquipmentRes(conn, reservation.reservationID);
+            
             try
             {
                 reader = cmd.ExecuteReader();
@@ -469,6 +470,28 @@ namespace TDG
                 return;
             
             String commandLine = "INSERT INTO " + "reservationidlist" + " VALUES (" + equipment.equipmentID + "," + reservationID + ");";
+            MySqlDataReader reader = null;
+            MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+
+            try
+            {
+                reader = cmd.ExecuteReader();
+                reader.Read();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+            }
+        }
+        private void removeEquipmentRes(MySqlConnection conn, int reservationID)
+        {
+
+            String commandLine = "DELETE FROM " + "reservationidlist" + " WHERE (" + "reservationID" + " = " + reservationID + ");";
             MySqlDataReader reader = null;
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
 
