@@ -586,9 +586,11 @@ namespace LogicLayer
             List<int> equipmentIDList = new List<int>();
             List<Reservation> reservationList = ReservationMapper.getInstance().getListOfReservations();
             List<Equipment> equipmentList = EquipmentMapper.getInstance().getListOfEquipment();
+            bool putOnWaitlist = false;
 
             foreach (string name in equipmentNameList)   //perform on each string in equipmentNameList *e.g. "computer"
             {
+                bool equipmentFound = false;
                 foreach (Equipment equipment in equipmentList)   //Goes through all equipment objects
                 {
                     if (equipment.equipmentName == name && !equipmentIDList.Contains(equipment.equipmentID))    //Comparing to all objects with matching name *e.g. to all computers
@@ -619,16 +621,23 @@ namespace LogicLayer
                         if (isAvailable)
                         {
                             equipmentIDList.Add(equipment.equipmentID);
+                            equipmentFound = true;
                             break;
                         }
                     }
                 }
-            }
-            if (equipmentIDList.Count() != equipmentNameList.Count())
-            {
-                //An equipment was no longer available
+                if (!equipmentFound)
+                {
+                    //put on waitlist
+
+                    putOnWaitlist = true;
+                }
             }
 
+            if (putOnWaitlist)
+            {
+                return new List<int>();
+            }
             return equipmentIDList;
         }
     }
