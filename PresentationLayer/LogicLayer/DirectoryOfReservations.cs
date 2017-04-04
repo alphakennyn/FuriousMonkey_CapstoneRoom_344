@@ -32,7 +32,7 @@ namespace LogicLayer
             Reservation reservation = new Reservation(reservationID, userID, roomID, desc, date, equipmentList);
 
             reservationList.Add(reservation);
-
+            DirectoryOfEquipment.getInstance().addToReservationIDList(equipmentList, reservationID);
             return reservation;
         }
 

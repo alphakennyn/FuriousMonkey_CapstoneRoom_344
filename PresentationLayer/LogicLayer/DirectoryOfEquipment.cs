@@ -47,5 +47,13 @@ namespace LogicLayer
             }
             return null;
         }
+
+        public void addToReservationIDList(List<Equipment> equipmentList, int reservationID)
+        {
+            foreach( Equipment equipment in equipmentList)
+            {
+                equipment.reservationIDList.Add(reservationID);
+            }
+        }
     }
 }
