@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using PresentationLayer.Hubs;
 using Mappers;
+using PostSharp.Aspects;
 
 namespace LogicLayer
 {
@@ -31,6 +32,7 @@ namespace LogicLayer
         }
 
         //Method to make a reservation
+        [InterceptReservationAspect]
         public void makeReservation(int userID, int roomID, string desc, DateTime date, int firstHour, int lastHour)
         {
             List<int> hours = new List<int>();
@@ -432,7 +434,7 @@ namespace LogicLayer
             }
             int currentHours = TimeSlotMapper.getInstance().findHoursByReservationID(result);
             //checks of reservation is possible according to constraint
-            if (currentHours + newHours <= 4)
+            if (currentHours + newHours <= 3)
             {
                 return true;
             }
@@ -472,5 +474,160 @@ namespace LogicLayer
             return false;
         }
 
+    }
+
+    [Serializable]
+    public class InterceptReservationAspect : MethodInterceptionAspect
+    {
+        public override void OnInvoke(MethodInterceptionArgs args)
+        {
+            //Weekly hour counter
+            int hourCount = 0;
+
+            //3 week repeated reservation constraint flag
+            Boolean threeWeekRepeat = false;
+
+            //UserID, RoomID and Datetime argument taken from makeReservation method
+            int curUserId = (int)args.Arguments[0];
+            int curRoomId = (int)args.Arguments[1];
+            DateTime curResDate = (DateTime)args.Arguments[3];
+
+            //FirstHour and LastHour arguments taken from Makereservation method
+            int firstH = (int)args.Arguments[4];
+            int lastH = (int)args.Arguments[5];
+
+            int curResHours = lastH - firstH;
+
+            ReservationMapper resMap = ReservationMapper.getInstance();
+
+            //Loop through the last 6 days to check how many hours have been reserved
+            foreach (DateTime dayBefore in EachDay(curResDate.AddDays(-6), curResDate)){
+                List<int> reserveIds = resMap.findReservationIDs(curUserId, dayBefore);
+                if (reserveIds != null)
+                {
+                    foreach (int resId in reserveIds)
+                    {
+                        Reservation res = resMap.getReservation(resId);
+                        hourCount += res.timeSlots.Count;
+                    }
+                }
+            }
+
+            //Loop through the next 6 days to check how many hours have been reserved
+            foreach (DateTime dayAfter in EachDay(curResDate, curResDate.AddDays(6))){
+                List<int> reserveIds = resMap.findReservationIDs(curUserId, dayAfter);
+                if (reserveIds != null)
+                {
+                    foreach (int resId in reserveIds)
+                    {
+                        Reservation res = resMap.getReservation(resId);
+                        hourCount += res.timeSlots.Count;
+                    }
+                }
+            }
+
+            List<int> threeWeeksAgoRes = resMap.findReservationIDs(curUserId, curResDate.AddDays(-21));
+            List<int> twoWeeksAgoRes = resMap.findReservationIDs(curUserId, curResDate.AddDays(-14));
+            List<int> oneWeekAgoRes = resMap.findReservationIDs(curUserId, curResDate.AddDays(-7));
+
+            //Check the last 3 weeks for the same reservation that is currently being made
+            //If the same reservation has been made, stop it from being made on the 4th week
+            if (oneWeekAgoRes != null && twoWeeksAgoRes != null && threeWeeksAgoRes != null)
+            {
+                Boolean oneAgo = false, twoAgo = false, threeAgo = false;
+
+                foreach (int resId in oneWeekAgoRes)
+                {
+                    Reservation res = resMap.getReservation(resId);
+                    Boolean firstHourBool = false, lastHourBool = false;
+
+                    if (res.roomID == curRoomId)
+                    {
+                        foreach (TimeSlot ts in res.timeSlots)
+                        {
+                            if (ts.hour == firstH)
+                            {
+                                firstHourBool = true;
+                            }
+                            else if (ts.hour == lastH)
+                            {
+                                lastHourBool = true;
+                            }
+                        }
+                    }
+
+                    if (firstHourBool && lastHourBool)
+                        oneAgo = true;
+                }
+
+                foreach (int resId in twoWeeksAgoRes)
+                {
+                    Reservation res = resMap.getReservation(resId);
+                    Boolean firstHourBool = false, lastHourBool = false;
+
+                    if (res.roomID == curRoomId)
+                    {
+                        foreach (TimeSlot ts in res.timeSlots)
+                        {
+                            if (ts.hour == firstH)
+                            {
+                                firstHourBool = true;
+                            }
+                            else if (ts.hour == lastH)
+                            {
+                                lastHourBool = true;
+                            }
+                        }
+                    }
+
+                    if (firstHourBool && lastHourBool)
+                        twoAgo = true;
+                }
+
+                foreach (int resId in threeWeeksAgoRes)
+                {
+                    Reservation res = resMap.getReservation(resId);
+                    Boolean firstHourBool = false, lastHourBool = false;
+
+                    if (res.roomID == curRoomId)
+                    {
+                        foreach (TimeSlot ts in res.timeSlots)
+                        {
+                            if (ts.hour == firstH)
+                            {
+                                firstHourBool = true;
+                            }
+                            else if (ts.hour == lastH)
+                            {
+                                lastHourBool = true;
+                            }
+                        }
+                    }
+
+                    if (firstHourBool && lastHourBool)
+                        threeAgo = true;
+                }
+
+                if (oneAgo && twoAgo && threeAgo)
+                    threeWeekRepeat = true;
+            }
+
+            //If total hours reserved plus current reservation hours <= 3 proceed with the method makeReservation
+            if ((hourCount + curResHours <= 3) && !threeWeekRepeat)
+            {
+                //Method proceeds as normally expected
+                args.Proceed(); //Same as base.OnInvoke(args); 
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Weekly hour constraint has been met, reservation has not been made.");
+            }
+        }
+
+        public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+        {
+            for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+                yield return day;
+        }
     }
 }
