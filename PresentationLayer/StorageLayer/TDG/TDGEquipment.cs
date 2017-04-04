@@ -500,57 +500,5 @@ namespace TDG
             else
                 return -2;
         }
-
-        //public Dictionary<int, Object[]> findAvailableEquipment(DateTime date, int firstHour,int lastHour, List<string> equipmentNameList)
-        //{
-        //    Dictionary<int, Object[]> records = new Dictionary<int, Object[]>();
-        //    MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
-        //    String commandLine = "SELECT * FROM " + TABLE_NAME + " WHERE 1;";
-        //    MySqlDataReader reader = null;
-
-        //    try
-        //    {
-        //        conn.Open();
-
-        //        MySqlCommand cmd = new MySqlCommand(commandLine, conn);
-        //        reader = cmd.ExecuteReader();
-
-        //        // If no record is found, return empty records
-        //        if (!reader.HasRows)
-        //        {
-        //            reader.Close();
-        //            conn.Close();
-        //            return records;
-        //        }
-
-        //        // For each reader, add it to the dictionary
-        //        while (reader.Read())
-        //        {
-        //            if (reader[0].GetType() == typeof(System.DBNull))
-        //            {
-        //                reader.Close();
-        //                conn.Close();
-        //                return records;
-        //            }
-        //            Object[] attributes = new Object[FIELDS.Length];
-        //            attributes[0] = reader[0]; // equipmentID                                               
-        //            attributes[1] = reader[1]; // equipmentName
-        //            attributes[2] = reader[2]; //reservationIDList
-        //            records.Add((int)reader[0], attributes);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //    finally
-        //    {
-        //        if (reader != null)
-        //            reader.Close();
-        //        conn.Close();
-        //    }
-
-        //    return records;
-        //}
     }
 }

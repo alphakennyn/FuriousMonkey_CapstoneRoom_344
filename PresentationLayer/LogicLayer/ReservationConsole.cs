@@ -194,12 +194,54 @@ namespace LogicLayer
         public void updateEquipmentWaitList()
         {
             List <Object[]> waitingUsers = EquipmentWaitsForMapper.getInstance().getAll(); //get all objects in equipmentWaitsFor
-            foreach(Object waitingUser in waitingUsers)
+            Dictionary<int, List<string>> userDictionary = new Dictionary<int, List<string>>();
+            foreach(Object[] waitingUser in waitingUsers)   //put waitingUsers with the same userID together
             {
-                //do stuff
+                int userID = (int)waitingUser[1];
+                string equipmentName = (string)waitingUser[0];
+                DateTime date = Convert.ToDateTime((string)waitingUser[2]);
+                int firstHour = (int)waitingUser[3];
+                int lastHour = (int)waitingUser[4];
+                int roomID = (int)waitingUser[5];
 
+                if (userDictionary.ContainsKey(userID)) //if user already has their ID in the dictionary 
+                {
+                    userDictionary[userID].Add(equipmentName);
+                }
+                else    //add the user to the dictionary
+                {
+                    List<string> userNameList = new List<string>();
+                    userNameList.Add(equipmentName);
+                    userDictionary.Add(userID, userNameList);
+                }
 
             }
+            foreach(KeyValuePair<int, List<string>> user in userDictionary)
+            {
+                DateTime date = Convert.ToDateTime("");
+                int firstHour = 0;
+                int lastHour = 0;
+                int roomID = 0;
+                foreach (Object[] waitingUser in waitingUsers)
+                {
+                    if ((int)waitingUser[1] == user.Key)
+                    {
+                        date = Convert.ToDateTime((string)waitingUser[2]);
+                        firstHour = (int)waitingUser[3];
+                        lastHour = (int)waitingUser[4];
+                        roomID = (int)waitingUser[5];
+                        break;
+                    }
+                }
+
+                List<int> availableIDs = getAvailableEquipmentIDList(date, firstHour, lastHour, user.Value);
+
+                if (!availableIDs.Contains(-1))
+                {
+                    makeReservation(user.Key, roomID, "", date, firstHour, lastHour, user.Value);
+                }
+            }
+            
         }
 
         // Method to modify a reservation
@@ -350,6 +392,7 @@ namespace LogicLayer
             ReservationMapper.getInstance().modifyReservation(resToModify.reservationID, roomID, desc, date);
             ReservationMapper.getInstance().done();
             updateDirectories();
+            updateEquipmentWaitList();
         }
 
         // Method to cancel a reservation
@@ -438,6 +481,7 @@ namespace LogicLayer
             ReservationMapper.getInstance().delete(reservationID);
             ReservationMapper.getInstance().done();
             updateDirectories();
+            updateEquipmentWaitList();
         }
 
         public Queue<int> findCapstone(TimeSlot timeslot)
