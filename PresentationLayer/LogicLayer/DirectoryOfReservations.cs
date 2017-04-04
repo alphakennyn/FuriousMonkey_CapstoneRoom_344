@@ -54,11 +54,13 @@ namespace LogicLayer
         public void cancelReservation(int reservationID)
         {
             foreach (Reservation reservation in this.reservationList)
+            {
                 if (reservation.reservationID == reservationID)
                 {
                     reservationList.Remove(reservation);
                     return;
                 }
+            }
         }
 
     }

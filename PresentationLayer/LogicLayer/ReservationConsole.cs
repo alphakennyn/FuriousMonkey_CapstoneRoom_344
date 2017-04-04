@@ -179,14 +179,13 @@ namespace LogicLayer
             {
                 // Obtain the date associated with that timeslot for the current reservation
                 DateTime timeSlotDate = ReservationMapper.getInstance().getReservation(timeSlot.reservationID).date;
-                // DateTime timeSlotDate = directoryOfReservations.getReservation(timeSlot.reservationID).date;
 
                 // We only want to remove the user from the waitlist of timeslots of the same date and hour 
                 if (timeSlot.waitlist.Contains(userID) && timeSlotDate.Equals(date) && timeSlot.hour == hour)
                 {
+                    
                     Queue<int> newQueue = new Queue<int>();
-                    int size = timeSlot.waitlist.Count;
-                    for (int i = 0; i < size; i++)
+                    for (int i = 0; i < timeSlot.waitlist.Count; i++)
                     {
                         if (timeSlot.waitlist.Peek() == userID)
                         {
@@ -198,6 +197,11 @@ namespace LogicLayer
                         }
                     }
                     TimeSlotMapper.getInstance().setTimeSlot(timeSlot.timeSlotID, timeSlot.reservationID, newQueue);
+                    /*
+                    List<int> tempList = timeSlot.waitlist.ToList();
+                    tempList.Remove(userID);
+                    Queue<int> newQueue = new Queue<int>(tempList);
+                    TimeSlotMapper.getInstance().setTimeSlot(timeSlot.timeSlotID, timeSlot.reservationID, newQueue);*/
                 }
 
             }
@@ -378,13 +382,17 @@ namespace LogicLayer
                     // - Update the timeslot from old reservation to the new one. (done - timeslot)
                     else
                     {
-                        if(findCapstone(timeSlot).Count > 0) //if there are capstone students
+                        Queue<int> capstoneStudents = findCapstone(timeSlot);
+                        int size = capstoneStudents.Count;
+                        if (size > 0) //if there are capstone students
                         {
-                            for(int j = 0; j < findCapstone(timeSlot).Count; j++)
+                           
+                            for (int j = 0; j < size; j++)
                             {
-                                int userID = findCapstone(timeSlot).Dequeue();
+                                int userID = capstoneStudents.Dequeue();
+                               
                                 //if they meet the constraints
-                                if(weeklyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(reservationID).date)
+                                if (weeklyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(reservationID).date)
                                    && dailyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(reservationID).date,
                                    TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour, TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour))
                                 {
@@ -404,10 +412,13 @@ namespace LogicLayer
                                 updateWaitList(userID, ReservationMapper.getInstance().getReservation(reservationID).date, TimeSlotMapper.getInstance().getListOfTimeSlots()[i].hour);
                                 j--;
                             }
+
+
                         }
                         else
                         {
-                            for (int k = 0; k < TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist.Count; k++)
+                            int sizeWaitlist = TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist.Count;
+                            for (int k = 0; k < sizeWaitlist; k++)
                             {
                                 int userID = TimeSlotMapper.getInstance().getListOfTimeSlots()[i].waitlist.Dequeue();
                                 if (weeklyConstraintCheck(userID, ReservationMapper.getInstance().getReservation(reservationID).date)
@@ -442,11 +453,13 @@ namespace LogicLayer
             updateDirectories();
         }
 
+        
         public Queue<int> findCapstone(TimeSlot timeslot)
         {
             Queue<int> tempQueue = timeslot.waitlist;
             Queue<int> newQueue = new Queue<int>();
-            for(int i = 0; i < timeslot.waitlist.Count; i++)
+            int size = timeslot.waitlist.Count;
+            for (int i = 0; i < size; i++)
             {
                 User tempUser = UserMapper.getInstance().getUser(tempQueue.Dequeue());
                 if (tempUser != null && tempUser.inCapstone)
@@ -456,6 +469,7 @@ namespace LogicLayer
             }
             return newQueue;
         }
+
 
         public List<TimeSlot> getAllTimeSlots()
         {
