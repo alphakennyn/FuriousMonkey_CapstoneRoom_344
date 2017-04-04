@@ -42,28 +42,6 @@ namespace LogicLayer
             foreach (Reservation reservation in ReservationMapper.getInstance().getListOfReservations())    //Goes through all reservations in listOfReservations
             {
 
-                //The equipment handling and its waitlist ***********EQUIPMENT WAITLIST WILL BE HANDLED IN THIS SECTION**********
-                if (reservation.date.Date == date.Date) //Checks each reservation with a matching date to the date selected
-                {
-                    foreach (TimeSlot timeSlot in reservation.timeSlots)    //Check every timeslot in a reservation of the same date
-                    {
-                        for (int i = firstHour; i <= lastHour; i++) //Checks if timeslot above has overlapping time with selected time
-                        {
-                            if (timeSlot.hour == i) //if the timeslot above overlaps
-                            {
-                                foreach (Equipment e in reservation.equipmentList)  //Goes through all equipment in currently checked reservation
-                                {
-                                    if (!e.equipmentWaitList.Contains(userID) && reservation.userID != userID)
-                                    {
-                                        e.equipmentWaitList.Enqueue(userID);
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
                 // Compare if the date (not the time portion) are the same and the rooms are the same
                 if (reservation.date.Date == date.Date && reservation.roomID == roomID)
                 {
@@ -585,9 +563,11 @@ namespace LogicLayer
             List<int> equipmentIDList = new List<int>();
             List<Reservation> reservationList = ReservationMapper.getInstance().getListOfReservations();
             List<Equipment> equipmentList = EquipmentMapper.getInstance().getListOfEquipment();
+            bool putOnWaitlist = false;
 
             foreach (string name in equipmentNameList)   //perform on each string in equipmentNameList *e.g. "computer"
             {
+                bool equipmentFound = false;
                 foreach (Equipment equipment in equipmentList)   //Goes through all equipment objects
                 {
                     if (equipment.equipmentName == name && !equipmentIDList.Contains(equipment.equipmentID))    //Comparing to all objects with matching name *e.g. to all computers
@@ -618,16 +598,23 @@ namespace LogicLayer
                         if (isAvailable)
                         {
                             equipmentIDList.Add(equipment.equipmentID);
+                            equipmentFound = true;
                             break;
                         }
                     }
                 }
-            }
-            if (equipmentIDList.Count() != equipmentNameList.Count())
-            {
-                //An equipment was no longer available
+                if (!equipmentFound)
+                {
+                    //put on waitlist
+
+                    putOnWaitlist = true;
+                }
             }
 
+            if (putOnWaitlist)
+            {
+                return new List<int>();
+            }
             return equipmentIDList;
         }
     }
