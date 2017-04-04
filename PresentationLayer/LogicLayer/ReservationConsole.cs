@@ -45,14 +45,17 @@ namespace LogicLayer
             
             if (availableEquipmentIDList.Contains(-1))
             {
+                int count = 0;
                 foreach( int i in availableEquipmentIDList)
                 {
                     if (i == -1)
                     {
-                        string equipmentName = equipmentNameList[i];    //specific equipment that is busy
 
+                        string equipmentName = equipmentNameList[count];//specific equipment that is busy
+                            
                         EquipmentWaitsForMapper.getInstance().putOnWaitingList(userID, date, firstHour, lastHour, equipmentName);
                     }
+                    count++;
                 }
             }
             else
