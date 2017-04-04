@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 02, 2017 at 03:53 AM
+-- Generation Time: Apr 04, 2017 at 04:39 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -49,9 +49,12 @@ INSERT INTO `equipment` (`equipmentID`, `equipmentName`) VALUES
 --
 
 CREATE TABLE `equipmentwaitsfor` (
-  `equipmentID` int(11) NOT NULL,
-  `userID` int(11) NOT NULL,
-  `dateTime` int(11) NOT NULL
+  `equipmentName` text NOT NULL,
+  `userID` int(3) NOT NULL,
+  `dateTime` text NOT NULL,
+  `firstHour` int(20) NOT NULL,
+  `lastHour` int(20) NOT NULL,
+  `roomID` int(3) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -68,14 +71,6 @@ CREATE TABLE `reservation` (
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `reservation`
---
-
-INSERT INTO `reservation` (`reservationID`, `userID`, `roomID`, `description`, `date`) VALUES
-(1, 3, 4, '', '2017-03-31'),
-(2, 3, 2, '', '2017-04-01');
-
 -- --------------------------------------------------------
 
 --
@@ -86,14 +81,6 @@ CREATE TABLE `reservationidlist` (
   `equipmentID` int(3) NOT NULL,
   `reservationID` int(3) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `reservationidlist`
---
-
-INSERT INTO `reservationidlist` (`equipmentID`, `reservationID`) VALUES
-(1, 1),
-(1, 2);
 
 -- --------------------------------------------------------
 
@@ -129,17 +116,6 @@ CREATE TABLE `timeslot` (
   `hour` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `timeslot`
---
-
-INSERT INTO `timeslot` (`timeSlotID`, `reservationID`, `hour`) VALUES
-(1, 1, 3),
-(2, 1, 4),
-(3, 1, 5),
-(4, 2, 1),
-(5, 2, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -150,18 +126,19 @@ CREATE TABLE `user` (
   `userID` int(11) NOT NULL,
   `username` varchar(30) NOT NULL,
   `password` varchar(30) NOT NULL,
-  `name` varchar(30) NOT NULL
+  `name` varchar(30) NOT NULL,
+  `inCapstone` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`userID`, `username`, `password`, `name`) VALUES
-(1, 'h_ortiz', 'hortiz', 'Hannah Ortiz'),
-(2, 'i_koun', 'ikoun', 'Ideawin Koun'),
-(3, 'p_lim', 'plim', 'Philip Lim'),
-(4, 'admin', 'admin', 'Administrator');
+INSERT INTO `user` (`userID`, `username`, `password`, `name`, `inCapstone`) VALUES
+(1, 'h_ortiz', 'hortiz', 'Hannah Ortiz', 0),
+(2, 'i_koun', 'ikoun', 'Ideawin Koun', 0),
+(3, 'p_lim', 'plim', 'Philip Lim', 0),
+(4, 'admin', 'admin', 'Administrator', 0);
 
 -- --------------------------------------------------------
 
@@ -174,13 +151,6 @@ CREATE TABLE `waitsfor` (
   `userID` int(11) NOT NULL,
   `dateTime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `waitsfor`
---
-
-INSERT INTO `waitsfor` (`timeSlotID`, `userID`, `dateTime`) VALUES
-(4, 2, '2017-04-01 17:31:41');
 
 --
 -- Indexes for dumped tables
@@ -196,7 +166,8 @@ ALTER TABLE `equipment`
 -- Indexes for table `equipmentwaitsfor`
 --
 ALTER TABLE `equipmentwaitsfor`
-  ADD PRIMARY KEY (`equipmentID`,`userID`);
+  ADD KEY `userID` (`userID`),
+  ADD KEY `roomID` (`roomID`);
 
 --
 -- Indexes for table `reservation`
