@@ -17,7 +17,8 @@
         <li>Week</li>
     </ul>
     <ul class="room">
-        @for (var room = 1; room <= 25; room++)
+       
+        @for (var room = 1; room <= 5; room++)
         {
             <li>Room @room</li>
         }
@@ -25,19 +26,45 @@
 </div>
 
 <ul class="timeslots">
-    @for(var room = 1; room <= 25; room++) {
+    @for(var room = 1; room <= 5; room++) {
         <li>
             
             <ul>
-                @for(var timeslot=8; timeslot<=23;timeslot++){
-                <li data-room="@room" data-timeslot="@timeslot">@timeslot:00</li>
-              
+                @for(var timeslot=0; timeslot<24;timeslot++){
+                        <li data-room="@room" data-timeslot="@timeslot">@timeslot:00</li>
                 }    
             </ul>
         </li>
   
     }
 </ul>
+<div class="equipment">
+    <ul class="equipmentHeader">
+        <li>
+            Reserve Equipment
+        </li>
+    </ul>
+    <ul class="equipmentBody">
+        <li>
+            Computer
+        </li>
+        <li>
+            <input type="number" id="computers" name="computers" class="numberSelect" min="0" max="2" value="0">
+        </li>
+        <li>
+            Projector
+        </li>
+        <li>
+            <input type="number" id="projectors" name="projectors" class="numberSelect" min="0" max="2" value="0">
+        </li>
+        <li>
+            Markers
+        </li>
+        <li>
+            <input type="number" id="markers" name="markers" class="numberSelect" min="0" max="1" value="0">
+        </li>
+    </ul>
+</div>
 @using (Ajax.BeginForm("makeReservation", "Home", new AjaxOptions {
     HttpMethod = "Post",
     UpdateTargetId = "result"
@@ -46,7 +73,7 @@
 <div class="reservation-popup-test ">
     <ul>
         <li class="header">Reserve<span class="glyphicon glyphicon-remove"></span></li> 
-        <li class="col-lg-12 col-md-12">Your selection is from <span id="firstTimeslot"></span> to <span id="lastTimeslot"></span></li>
+        <li class="col-lg-12 col-md-12">Your selection is from <span id="firstTimeslot"></span>:00 to <span id="lastTimeslot"></span>:00</li>
 
         <li class="col-lg-12 col-md-12"><input type="text" class="form-control input-sm" id="inputCourseName" name="description" placeholder="Course Name" /></li>
 
@@ -56,6 +83,9 @@
         <input type="hidden" name="day" value="0" />
         <input type="hidden" name="month" value="0" />
         <input type="hidden" name="year" value="0" />
+        <input type="hidden" name="numOfComputers" value="0" />
+        <input type="hidden" name="numOfProjectors" value="0" />
+        <input type="hidden" name="numOfMarkers" value="0" />
         <li class="col-lg-offset-8 col-md-offset-8 col-sm-offset-8 col-xs-offset-8"><input type="submit" id="submitButton" class="btn btn-primary"></li>
     </ul>
 
@@ -115,27 +145,6 @@
                                 <option value="3" >H961-3</option>
                                 <option value="4" >H961-4</option>
                                 <option value="5" >H961-5</option>
-                                <option value="6" >H961-6</option>
-                                <option value="7" >H961-7</option>
-                                <option value="8" >H961-8</option>
-                                <option value="9" >H961-9</option>
-                                <option value="10" >H961-10</option>
-                                <option value="11" >H961-11</option>
-                                <option value="12" >H961-12</option>
-                                <option value="13" >H961-13</option>
-                                <option value="14" >H961-14</option>
-                                <option value="15" >H961-15</option>
-                                <option value="16" >H961-16</option>
-                                <option value="17" >H961-17</option>
-                                <option value="18" >H961-18</option>
-                                <option value="19" >H961-19</option>
-                                <option value="20" >H961-20</option>
-                                <option value="21" >H961-21</option>
-                                <option value="22" >H961-22</option>
-                                <option value="23" >H961-23</option>
-                                <option value="24" >H961-24</option>
-                                <option value="25" >H961-25</option>
-
                             </select>
                         </div>
                    
@@ -156,7 +165,13 @@
                     <div class="modify-label">Fom</div>
                         <div class="col-lg-10">
                             <select class="form-control input-sm ddl-initialTimeslot" name="initialTimeslot">
-                               
+                                <option value="1">1:00</option>
+                                <option value="2">2:00</option>
+                                <option value="3">3:00</option>
+                                <option value="4">4:00</option>
+                                <option value="5">5:00</option>
+                                <option value="6">6:00</option>
+                                <option value="7">7:00</option>
                                 <option value="8" >8:00</option>
                                 <option value="9" >9:00</option>
                                 <option value="10" >10:00</option>
@@ -173,16 +188,20 @@
                                 <option value="21" >21:00</option>
                                 <option value="22" >22:00</option>
                                 <option value="23" >23:00</option>
-                                <option value="24" >24:00</option>
-                                <option value="25" >25:00</option>
-
+                                <option value="00" >00:00</option>
                             </select>
                         </div>
                     <input type="hidden" name="resid" value="0" />
                     <div class="modify-label">To</div>
                         <div class="col-lg-10">
                             <select class="form-control input-sm ddl-finalTimeslot" name="finalTimeslot">
-
+                                <option value="1" hidden>1:00</option>
+                                <option value="2" hidden>2:00</option>
+                                <option value="3" hidden>3:00</option>
+                                <option value="4" hidden>4:00</option>
+                                <option value="5" hidden>5:00</option>
+                                <option value="6" hidden>6:00</option>
+                                <option value="7" hidden>7:00</option>
                                 <option value="8" hidden >8:00</option>
                                 <option value="9" hidden >9:00</option>
                                 <option value="10" hidden >10:00</option>
@@ -199,9 +218,7 @@
                                 <option value="21" hidden >21:00</option>
                                 <option value="22" hidden >22:00</option>
                                 <option value="23" hidden >23:00</option>
-                                <option value="24" hidden >24:00</option>
-                                <option value="25" hidden >25:00</option>
-
+                                <option value="00" hidden >00:00</option>
                             </select>
 
                             <input type="hidden" name="day" value="0" />
@@ -229,7 +246,7 @@
 
 <div class="Single-Timeslot-Reserve">
 	<ul>
-		<li class="col-lg-12 col-md-12">Your selection is from <span id="firstTimeslot"></span> to <span id="lastTimeslot"></span></li>
+		<li class="col-lg-12 col-md-12">Your selection is from <span id="firstTimeslot"></span>:00 to <span id="lastTimeslot"></span>:00</li>
 		<li class="col-lg-12 col-md-12">Description: <span id="inputCourseName"></span></li>
 	</ul>
 </div>

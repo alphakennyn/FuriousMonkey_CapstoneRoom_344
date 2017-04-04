@@ -26,9 +26,9 @@ namespace LogicLayer
         }
 
         // Method to make a new user
-        public User makeNewUser(int userID, String username, String password, String name)
+        public User makeNewUser(int userID, String username, String password, String name, Boolean capstoneStatus)
         {
-            User user = new User(userID, username, password, name);
+            User user = new User(userID, username, password, name, capstoneStatus);
             registeredUsers.Add(user);
             return user;
         }
@@ -42,6 +42,22 @@ namespace LogicLayer
                 {
                     registeredUsers[i].userID = userID;
                     registeredUsers[i].name = name;
+                    return registeredUsers[i];
+                }
+            }
+            return null;
+        }
+
+        // Method to modify a user with capstone 
+        public User modifyUser(int userID, String name, Boolean capstone)
+        {
+            for (int i = 0; i < registeredUsers.Count; i++)
+            {
+                if (registeredUsers[i].userID == userID)
+                {
+                    registeredUsers[i].userID = userID;
+                    registeredUsers[i].name = name;
+                    registeredUsers[i].inCapstone = capstone;
                     return registeredUsers[i];
                 }
             }

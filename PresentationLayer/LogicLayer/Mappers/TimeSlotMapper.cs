@@ -30,8 +30,8 @@ namespace Mappers
 
         }
 
-    // Get instance
-    public static TimeSlotMapper getInstance()
+        // Get instance
+        public static TimeSlotMapper getInstance()
         {
             return instance;
         }

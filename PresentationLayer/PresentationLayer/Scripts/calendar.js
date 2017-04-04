@@ -19,8 +19,6 @@ $(".reservation-popup-test").draggable();
 //header calendar 
 var date = new Date();
 
-
-
 var months = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 var days = ["SUNDAY","MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 
@@ -52,9 +50,19 @@ function setCalendarDate() {
     
 }
 
+function rendercalendar() {
+}
 
+//Function is run when submit button is clicked
+function setEquipment(event) {
+    var computers = $('#computers').val();
+    $("input[name='numOfComputers']").attr("value", computers);
 
-function rendercalendar(){
+    var projectors = $('#projectors').val();
+    $("input[name='numOfProjectors']").attr("value", projectors);
+
+    var markers = $('#markers').val();
+    $("input[name='numOfMarkers']").attr("value", markers);
 }
 
 //Function is run when any of the timeslot li is clicked
@@ -102,8 +110,8 @@ function timeslotClicked(event) {
         if ($(this).attr('data-room') == room) {
             //if timeslot selected at the begining or after the range
             if (firstAndLastTimeslot[1] <= timeslot2 ) {
-                if (timeslot2 - firstAndLastTimeslot[0] > 3) {
-                    firstAndLastTimeslot[1] = firstAndLastTimeslot[0] + 3;
+                if (timeslot2 - firstAndLastTimeslot[0] > 2) {
+                    firstAndLastTimeslot[1] = firstAndLastTimeslot[0] + 2;
                 }
                 else {
                     firstAndLastTimeslot[1] = timeslot2;
@@ -122,15 +130,15 @@ function timeslotClicked(event) {
                 //if timeslot is selected before the range
                 if (firstAndLastTimeslot[0] > timeslot2) {
 
-                    if (firstAndLastTimeslot[1] - timeslot2 <= 3) {
+                    if (firstAndLastTimeslot[1] - timeslot2 <= 2) {
                         firstAndLastTimeslot[0] = timeslot2;
                     }
                     else {
-                        firstAndLastTimeslot[0] = firstAndLastTimeslot[1] - 3;
+                        firstAndLastTimeslot[0] = firstAndLastTimeslot[1] - 2;
                     }
                     for (var i = firstAndLastTimeslot[0]; i <= firstAndLastTimeslot[1]; i++) {
                         //adds more timeslots to the already active tismeslots
-                        if ($("li[data-timeslot='" + i + "']li[data-room='" + room + "']").hasClass("active")) { }
+                        if ($("li[data-timeslot='" + i + "']li[data-room='" + room + "']").hasClass("active")) {/*do nothing*/}
                         else {
                             //toggles active the desired timesots
                             $("li[data-timeslot='" + i + "']li[data-room='" + room + "']").toggleClass("active");
@@ -157,7 +165,6 @@ function timeslotClicked(event) {
 
         }
     });
-
     
     $("#firstTimeslot").html(firstAndLastTimeslot[0]);
     $("input[name='firstTimeslot']").attr("value", firstAndLastTimeslot[0]);
@@ -165,9 +172,7 @@ function timeslotClicked(event) {
     $("#lastTimeslot").html(firstAndLastTimeslot[1] + 1);
     $("input[name='lastTimeslot']").attr("value", firstAndLastTimeslot[1]);
 
-
     }
-
 }
 
 $(".timeslots li ul li").on("click.firstFunction", function () {
@@ -252,6 +257,8 @@ $.connection.hub.start().done(function () {
 
 
 $("#submitButton").click(function () {
+
+    setEquipment(this);
     $(".glyphicon-remove").click();
 })
 
@@ -418,7 +425,7 @@ $(".reservation-content").on('click', ".modifyReservation", function () {
 
 
 $(".reservation-tab").click(function () {
-    if ($(".reservation-tab").hasClass("active")) { }
+    if ($(".reservation-tab").hasClass("active")) {/*do nothing*/}
     else {
         $(".reservation-tab").toggleClass('active');
         $(".waitlist-tab").toggleClass('active');
@@ -429,7 +436,7 @@ $(".reservation-tab").click(function () {
 
 
 $(".waitlist-tab").click(function () {
-    if ($(".waitlist-tab").hasClass("active")) { }
+    if ($(".waitlist-tab").hasClass("active")) {/*do nothing*/}
     else {
         $(".waitlist-tab").toggleClass('active');
         $(".reservation-tab").toggleClass('active');

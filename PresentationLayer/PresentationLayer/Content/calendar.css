@@ -24,47 +24,94 @@ body {font-family: Verdana,sans-serif;}
 }
 
 .room{
-    margin: 0;
-    padding: 10px 0;
+    margin: auto;
+    float: right;
+    padding: 10px ;
     background-color: #ddd;
     padding-bottom:0px;
     margin-top:47px;
     padding-left:0px;
     padding-right:0px;
     height:40px;
-
-    width:6250px;
-    position:absolute;
-    
-    
+    width: 85%;
+    position:relative;
 }
-
-
-.room li {
-    display: inline-block;
-    width: 250px;
+.equipment{
+   display: block;
+   margin: auto;
+   width: 15%;
+   height: 160px;
+   margin-top: 125px;
+   position: fixed;
+   border-left: 2px solid #3F4350;
+   border-right: 2px solid #3F4350;
+}
+.equipmentHeader{
+    display: block;
+    width: 100%;
+    height: 40px;
+    font-weight: bold;
     color: #666;
     text-align: center;
-margin-right:-5px;
-
+    padding-top: 7px;
+    padding-left: 0px;
+    border: 2px solid #3F4350;
+    border-left: none;
+    border-right: none;
+}
+.equipmentBody{
+    position: relative;
+    bottom: 12px;
+    display: block;
+    width: 100%;
+    color: #666;
+    text-align: center;
+    padding: 0px;
+    border: 0px solid #3F4350;
+    border-top: none;
+    color: white;
+}
+.equipmentBody li{
+    display: block;
+    height: 40px;
+    width: 50%;
+    line-height: 40px;
+    border-style: solid;
+    border: none;
+    border-bottom: 2px solid black;
+    float: left;
+    background-color: #3193C6;
+}
+.numberSelect{
+    width: 40%;
+    height: 30px;
+    text-align: left;
+    background-color: #3FA9E2;
+}
+.room li {
+    display: inline-block;
+    width: 20%;
+    color: #666;
+    text-align: center;
+    margin-right:-5px;
 }
 
 .timeslots {
- width:6250px;
-    margin: 0;
+    width: 85%;
+    float: right;
+    margin: auto;
     padding: 0px;
-
     background-color: #ddd;
-    padding-bottom:0px;
     margin-top:150px;
+    margin-bottom:40px;
 }
 
 .timeslots li {
     display: inline-block;
-    width: 250px;
+    width: 20%;
     color: #666;
     text-align: center;
-margin-right:-5px;
+    margin-right:-5px;
 }
 .timeslots li ul {
     width: 100%;
@@ -72,9 +119,7 @@ margin-right:-5px;
     text-align: center;
     background: #eee;
     margin-top:15px;
-  
-padding-left:0px;
-
+    padding-left:0px;
 }
 .timeslots li ul li{
     display: block;
@@ -82,12 +127,10 @@ padding-left:0px;
     margin-right: 0px;
     text-align: center;
     width: 100%;
-    vertical-align: middle;
     line-height: 40px;
     border: #d0d0d0;
     border-style: solid;
-    border-width: 1px 1px 0px 0px;
-    border-bottom-style: dotted;
+    border-width: 1px 0px 0px 1px;
 }
 .timeslots li ul li.active{
   background-color:#3193c6;

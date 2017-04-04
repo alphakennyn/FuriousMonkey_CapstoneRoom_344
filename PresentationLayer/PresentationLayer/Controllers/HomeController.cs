@@ -9,6 +9,7 @@ using LogicLayer;
 using Microsoft.AspNet.SignalR;
 using PresentationLayer.Hubs;
 using System.Threading;
+using System.Diagnostics;
 
 namespace CapstoneRoomScheduler.Controllers
 {
@@ -32,17 +33,34 @@ namespace CapstoneRoomScheduler.Controllers
         }
         [LoggedIn]
         [HttpPost]
-        public void makeReservation(int room,string description,int day,int month,int year,int firstTimeSlot, int lastTimeSlot)
+        public void makeReservation(int room,string description,int day,int month,int year,int firstTimeSlot, int lastTimeSlot, int numOfComputers, int numOfProjectors, int numOfMarkers)
         {
             if(Monitor.TryEnter(_lockobject[room],TimeSpan.FromSeconds(59))){
                 var userID = Int32.Parse(User.Identity.GetUserId());
                 var date = new DateTime(year, month, day);
                 var weeklyConstraint = ReservationConsole.getInstance().weeklyConstraintCheck(userID, date);
                 var dailyConstraint = ReservationConsole.getInstance().dailyConstraintCheck(userID, date, firstTimeSlot, lastTimeSlot);
+
+                //Store a name of equipment for each equipment requested into equipmentNameList
+                //Ex. 2 computers, 1 projector and 0 markers = {computer, computer, projector}
+                List<string> equipmentNameList = new List<string>();
+                for (int i = 0; i < numOfComputers; i++)
+                {
+                    equipmentNameList.Add("computer");
+                }
+                for (int j = 0; j < numOfProjectors; j++)
+                {
+                    equipmentNameList.Add("projector");
+                }
+                for (int k = 0; k < numOfMarkers; k++)
+                {
+                    equipmentNameList.Add("marker");
+                }
+
                 if (dailyConstraint && weeklyConstraint)
                 {
                     Thread.Sleep(4000); //locks room for 4 seconds for mutual exclusion
-                    ReservationConsole.getInstance().makeReservation(userID, room, description, date, firstTimeSlot, lastTimeSlot);
+                    ReservationConsole.getInstance().makeReservation(userID, room, description, date, firstTimeSlot, lastTimeSlot, equipmentNameList);
                     GlobalHost.ConnectionManager.GetHubContext<CalendarHub>().Clients.Group(User.Identity.GetUserId()).incomingMessage("Reservation has been successfully created");
                     updateCalendar(year, month, day);
                 }

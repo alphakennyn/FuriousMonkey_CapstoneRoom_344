@@ -277,15 +277,24 @@ namespace TDG
             if(reservation == null)
                 return;
 
+            
             String mySqlDate = reservation.date.Date.ToString("yyyy-MM-dd");
             String commandLine = "INSERT INTO " + TABLE_NAME + " VALUES (" + reservation.reservationID + "," +
                 reservation.userID + "," + reservation.roomID + ",'" + reservation.description + "', '" +
                 mySqlDate + " ');";
+
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+            foreach (Equipment equipment in reservation.equipmentList)
+            {
+                createEquipmentRes(conn,equipment, reservation.reservationID);
+            }
+
             MySqlDataReader reader = null;
             try
             {
-                reader = cmd.ExecuteReader();
+                
+                    reader = cmd.ExecuteReader();
+                reader.Read();
             }
             catch(Exception e)
             {
@@ -320,7 +329,7 @@ namespace TDG
             {
                 reader = cmd.ExecuteReader();
             }
-            catch(Exception ex)
+            catch(Exception e)
             {
                 throw;
             }
@@ -344,7 +353,8 @@ namespace TDG
             String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + reservation.reservationID + ";";
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
             MySqlDataReader reader = null;
-
+            removeEquipmentRes(conn, reservation.reservationID);
+            
             try
             {
                 reader = cmd.ExecuteReader();
@@ -453,6 +463,52 @@ namespace TDG
 
             //Format and return the result
             return IDlist;
+        }
+        private void createEquipmentRes(MySqlConnection conn, Equipment equipment, int reservationID)
+        {
+            if (equipment == null)
+                return;
+            
+            String commandLine = "INSERT INTO " + "reservationidlist" + " VALUES (" + equipment.equipmentID + "," + reservationID + ");";
+            MySqlDataReader reader = null;
+            MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+
+            try
+            {
+                reader = cmd.ExecuteReader();
+                reader.Read();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+            }
+        }
+        private void removeEquipmentRes(MySqlConnection conn, int reservationID)
+        {
+
+            String commandLine = "DELETE FROM " + "reservationidlist" + " WHERE (" + "reservationID" + " = " + reservationID + ");";
+            MySqlDataReader reader = null;
+            MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+
+            try
+            {
+                reader = cmd.ExecuteReader();
+                reader.Read();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+            }
         }
     }
 }
