@@ -590,7 +590,7 @@ namespace LogicLayer
             {
                 foreach (Equipment equipment in equipmentList)   //Goes through all equipment objects
                 {
-                    if (equipment.equipmentName == name)    //Comparing to all objects with matching name *e.g. to all computers
+                    if (equipment.equipmentName == name && !equipmentIDList.Contains(equipment.equipmentID))    //Comparing to all objects with matching name *e.g. to all computers
                     {
                         bool isAvailable = true;
                         foreach (int resID in equipment.reservationIDList)  //go through each reservation ID in the matching equipment
