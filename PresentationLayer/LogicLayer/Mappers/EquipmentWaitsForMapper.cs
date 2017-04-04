@@ -29,9 +29,9 @@ namespace Mappers
         {
             tdgEquipmentWaitsFor.refreshEquipmentWaitsFor(refreshList);
         }
-        public void putOnWaitingList(int userID, DateTime date, int firstHour, int lastHour, string equipmentName)
+        public void putOnWaitingList(int userID, DateTime date, int firstHour, int lastHour, string equipmentName, int roomID)
         {
-            tdgEquipmentWaitsFor.addEquipmentWaitsFor(equipmentName, userID, date, firstHour, lastHour);
+            tdgEquipmentWaitsFor.addEquipmentWaitsFor(equipmentName, userID, date, firstHour, lastHour, roomID);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace TDG
         private static TDGEquipmentWaitsFor instance = new TDGEquipmentWaitsFor();
 
         // Field names of the table
-        private static readonly String[] FIELDS = { "equipmentName", "userID", "dateTime", "firstHour", "lastHour" };
+        private static readonly String[] FIELDS = { "equipmentName", "userID", "dateTime", "firstHour", "lastHour","roomID" };
 
         // Database server (localhost)
         private const String DATABASE_SERVER = "127.0.0.1";
@@ -157,7 +157,7 @@ namespace TDG
                             if (!results.Contains(userID))
                             {
                                 String currentDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                createEquipmentWaitsFor(conn, equipment.equipmentName, userID, currentDateTime, 0, 1);
+                                createEquipmentWaitsFor(conn, equipment.equipmentName, userID, currentDateTime, 0, 1,1);
                             }
                         }
                     }
@@ -200,7 +200,7 @@ namespace TDG
             }
         }
 
-        public void addEquipmentWaitsFor(string equipmentName, int userID, DateTime currentDateTime, int firstHour, int lastHour)
+        public void addEquipmentWaitsFor(string equipmentName, int userID, DateTime currentDateTime, int firstHour, int lastHour,int roomID)
         {
 
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
@@ -209,7 +209,7 @@ namespace TDG
             try
             {
                 conn.Open();
-                    createEquipmentWaitsFor(conn, equipmentName, userID, stringDateTime, firstHour, lastHour);
+                    createEquipmentWaitsFor(conn, equipmentName, userID, stringDateTime, firstHour, lastHour,roomID);
             }
             catch (MySqlException e)
             {
@@ -221,9 +221,9 @@ namespace TDG
             }
         }
 
-        private void createEquipmentWaitsFor(MySqlConnection conn, string equipmentName, int userID, string currentDateTime, int firstHour, int lastHour)
+        private void createEquipmentWaitsFor(MySqlConnection conn, string equipmentName, int userID, string currentDateTime, int firstHour, int lastHour, int roomID)
         {
-            String commandLine = "INSERT INTO " + TABLE_NAME + " VALUES ( '" + equipmentName + "'," + userID + ", '" + currentDateTime + "'," + firstHour + "," + lastHour + ");";
+            String commandLine = "INSERT INTO " + TABLE_NAME + " VALUES ( '" + equipmentName + "'," + userID + ", '" + currentDateTime + "'," + firstHour + "," + lastHour +","+roomID +");";
             MySqlDataReader reader = null;
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
             try

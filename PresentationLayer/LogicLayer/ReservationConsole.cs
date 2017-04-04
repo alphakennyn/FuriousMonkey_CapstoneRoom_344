@@ -53,7 +53,7 @@ namespace LogicLayer
 
                         string equipmentName = equipmentNameList[count];//specific equipment that is busy
                             
-                        EquipmentWaitsForMapper.getInstance().putOnWaitingList(userID, date, firstHour, lastHour, equipmentName);
+                        EquipmentWaitsForMapper.getInstance().putOnWaitingList(userID, date, firstHour, lastHour, equipmentName,roomID);
                     }
                     count++;
                 }
