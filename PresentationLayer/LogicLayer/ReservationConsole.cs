@@ -216,33 +216,67 @@ namespace LogicLayer
                 }
 
             }
-            foreach(KeyValuePair<int, List<string>> user in userDictionary)
+            foreach(KeyValuePair<int, List<string>> user in userDictionary) //Do for capstone students first
             {
-                DateTime date = DateTime.Now;
-                int firstHour = 0;
-                int lastHour = 0;
-                int roomID = 0;
-                foreach (Object[] waitingUser in waitingUsers)
+                User userObject = UserMapper.getInstance().getUser(user.Key);
+                if (userObject.inCapstone == true)
                 {
-                    if ((int)waitingUser[1] == user.Key)
+                    DateTime date = DateTime.Now;
+                    int firstHour = 0;
+                    int lastHour = 0;
+                    int roomID = 0;
+                    foreach (Object[] waitingUser in waitingUsers)
                     {
-                        date = Convert.ToDateTime((string)waitingUser[2]);
-                        firstHour = (int)waitingUser[3];
-                        lastHour = (int)waitingUser[4];
-                        roomID = (int)waitingUser[5];
-                        break;
+                        if ((int)waitingUser[1] == user.Key)
+                        {
+                            date = Convert.ToDateTime((string)waitingUser[2]);
+                            firstHour = (int)waitingUser[3];
+                            lastHour = (int)waitingUser[4];
+                            roomID = (int)waitingUser[5];
+                            break;
+                        }
+                    }
+
+                    List<int> availableIDs = getAvailableEquipmentIDList(date, firstHour, lastHour, user.Value);
+
+                    if (!availableIDs.Contains(-1))
+                    {
+                        makeReservation(user.Key, roomID, "", date, firstHour, lastHour, user.Value);
+                        EquipmentWaitsForMapper.getInstance().removeEquipmentWaitsFor(user.Key);
                     }
                 }
+            }
 
-                List<int> availableIDs = getAvailableEquipmentIDList(date, firstHour, lastHour, user.Value);
-
-                if (!availableIDs.Contains(-1))
+            foreach (KeyValuePair<int, List<string>> user in userDictionary)    //Do non-capstone students second
+            {
+                User userObject = UserMapper.getInstance().getUser(user.Key);
+                if (userObject.inCapstone == false)
                 {
-                    makeReservation(user.Key, roomID, "", date, firstHour, lastHour, user.Value);
-                    EquipmentWaitsForMapper.getInstance().removeEquipmentWaitsFor(user.Key);
+                    DateTime date = DateTime.Now;
+                    int firstHour = 0;
+                    int lastHour = 0;
+                    int roomID = 0;
+                    foreach (Object[] waitingUser in waitingUsers)
+                    {
+                        if ((int)waitingUser[1] == user.Key)
+                        {
+                            date = Convert.ToDateTime((string)waitingUser[2]);
+                            firstHour = (int)waitingUser[3];
+                            lastHour = (int)waitingUser[4];
+                            roomID = (int)waitingUser[5];
+                            break;
+                        }
+                    }
+
+                    List<int> availableIDs = getAvailableEquipmentIDList(date, firstHour, lastHour, user.Value);
+
+                    if (!availableIDs.Contains(-1))
+                    {
+                        makeReservation(user.Key, roomID, "", date, firstHour, lastHour, user.Value);
+                        EquipmentWaitsForMapper.getInstance().removeEquipmentWaitsFor(user.Key);
+                    }
                 }
             }
-            
         }
 
         // Method to modify a reservation
