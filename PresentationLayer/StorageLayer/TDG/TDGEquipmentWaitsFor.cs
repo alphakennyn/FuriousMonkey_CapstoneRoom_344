@@ -257,13 +257,33 @@ namespace TDG
             {
                 reader = cmd.ExecuteReader();
             }
-            catch(Exception ex)
+            catch(Exception e)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(e.Message);
             }
             finally
             {
                 if(reader!=null)
+                    reader.Close();
+            }
+        }
+        public void deleteEquipmentWaitsFor(int userID)
+        {
+            MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
+            string commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[1] + "=" + userID;
+            MySqlDataReader reader = null;
+            MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+            try
+            {
+                reader = cmd.ExecuteReader();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                if (reader != null)
                     reader.Close();
             }
         }

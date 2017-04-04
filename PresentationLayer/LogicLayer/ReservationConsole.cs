@@ -218,7 +218,7 @@ namespace LogicLayer
             }
             foreach(KeyValuePair<int, List<string>> user in userDictionary)
             {
-                DateTime date = Convert.ToDateTime("");
+                DateTime date = DateTime.Now;
                 int firstHour = 0;
                 int lastHour = 0;
                 int roomID = 0;
@@ -239,6 +239,7 @@ namespace LogicLayer
                 if (!availableIDs.Contains(-1))
                 {
                     makeReservation(user.Key, roomID, "", date, firstHour, lastHour, user.Value);
+                    EquipmentWaitsForMapper.getInstance().removeEquipmentWaitsFor(user.Key);
                 }
             }
             

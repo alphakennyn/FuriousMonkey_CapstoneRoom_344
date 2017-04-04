@@ -33,5 +33,9 @@ namespace Mappers
         {
             tdgEquipmentWaitsFor.addEquipmentWaitsFor(equipmentName, userID, date, firstHour, lastHour, roomID);
         }
+        public void removeEquipmentWaitsFor(int userID)
+        {
+            tdgEquipmentWaitsFor.deleteEquipmentWaitsFor(userID);
+        }
     }
 }
