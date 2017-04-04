@@ -270,11 +270,13 @@ namespace TDG
         public void deleteEquipmentWaitsFor(int userID)
         {
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
-            string commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[1] + "=" + userID;
+            string commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[1] + "=" + userID+";";
             MySqlDataReader reader = null;
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
+            
             try
             {
+                conn.Open();
                 reader = cmd.ExecuteReader();
             }
             catch (Exception e)
@@ -285,6 +287,7 @@ namespace TDG
             {
                 if (reader != null)
                     reader.Close();
+                conn.Close();
             }
         }
     }
