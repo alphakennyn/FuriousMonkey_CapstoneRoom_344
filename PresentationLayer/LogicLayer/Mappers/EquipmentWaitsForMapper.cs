@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TDG;
 using LogicLayer;
+using System;
 
 namespace Mappers
 {
@@ -10,7 +11,7 @@ namespace Mappers
         // Instance of this mapper object
         private static EquipmentWaitsForMapper instance = new EquipmentWaitsForMapper();
 
-        private TDGWaitsFor tdgWaitsFor = TDGWaitsFor.getInstance();
+        private TDGEquipmentWaitsFor tdgEquipmentWaitsFor = TDGEquipmentWaitsFor.getInstance();
 
         private EquipmentWaitsForMapper() { }
 
@@ -21,12 +22,16 @@ namespace Mappers
 
         public List<int> getAllUsers(int timeSlotID)
         {
-            return tdgWaitsFor.getAllUsers(timeSlotID);
+            return tdgEquipmentWaitsFor.getAllUsers(timeSlotID);
         }
 
         public void refreshWaitsFor(List<Equipment> refreshList)
         {
-            //TDGEquipmentWaitsFor.refreshWaitsFor(refreshList);
+            tdgEquipmentWaitsFor.refreshEquipmentWaitsFor(refreshList);
+        }
+        public void putOnWaitingList(int userID, DateTime date, int firstHour, int lastHour, string equipmentName)
+        {
+            tdgEquipmentWaitsFor.addEquipmentWaitsFor(equipmentName, userID, date, firstHour, lastHour);
         }
     }
 }

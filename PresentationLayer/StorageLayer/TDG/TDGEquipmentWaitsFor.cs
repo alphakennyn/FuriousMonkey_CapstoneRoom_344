@@ -22,7 +22,7 @@ namespace TDG
         private static TDGEquipmentWaitsFor instance = new TDGEquipmentWaitsFor();
 
         // Field names of the table
-        private static readonly String[] FIELDS = { "equipmentID", "userID", "dateTime" };
+        private static readonly String[] FIELDS = { "equipmentName", "userID", "dateTime", "firstHour", "lastHour" };
 
         // Database server (localhost)
         private const String DATABASE_SERVER = "127.0.0.1";
@@ -62,10 +62,10 @@ namespace TDG
          * Returns it as a List<int>
          * Where int is the ID of the object and Object[] contains the record of the row
          */
-        public List<int> getAllUsers(int equipmentID)
+        public List<int> getAllUsers(int equipmentName)
         {
             List<int> listOfUsers = new List<int>();
-            String commandLine = "SELECT " + FIELDS[1] + " FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + equipmentID + " ORDER BY " + FIELDS[2] + ";";
+            String commandLine = "SELECT " + FIELDS[1] + " FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + equipmentName + " ORDER BY " + FIELDS[2] + ";";
             MySqlDataReader reader = null;
             MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
 
@@ -111,20 +111,16 @@ namespace TDG
             return listOfUsers;
         }
 
-        /**
-         * 
-         */
-        public void refreshWaitsFor(List<TimeSlot> listOfTimeSlots)
+        public void refreshEquipmentWaitsFor(List<Equipment> listOfEquipment)
         {
 
-            
-            foreach (TimeSlot timeSlot in listOfTimeSlots)
+            foreach (Equipment equipment in listOfEquipment)
             {
                 // The list is not empty, refresh the content of the database
-                if (timeSlot.waitlist.Count != 0)
+                if (equipment.equipmentWaitList.Count() != 0)
                 {
-                    // Obtain all queuery for that timeSlot from the database
-                    String commandLine = "SELECT " + FIELDS[1] + " FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + timeSlot.timeSlotID;
+                    // Obtain all queuery for that equipment from the database
+                    String commandLine = "SELECT " + FIELDS[1] + " FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + equipment.equipmentName;
                     MySqlDataReader reader = null;
                     MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
 
@@ -143,25 +139,25 @@ namespace TDG
                         }
                         reader.Close();
 
-                        // Get the waitlist of the timeSlot that is refreshed
-                        Queue<int>  waitlist = timeSlot.waitlist;
+                        // Get the waitlist of the equipment that is refreshed
+                        Queue<int>  equipmentWaitlist = equipment.equipmentWaitList;
 
                         // If a userID is found in the DB but not in the waitlist: remove from the DB
                         foreach (int userID in results)
                         {
-                            if (!waitlist.Contains(userID))
+                            if (!equipmentWaitlist.Contains(userID))
                             {
-                                deleteWaitsFor(conn, timeSlot.timeSlotID, userID);
+                                deleteWaitsFor(conn, equipment.equipmentID, userID);
                             }
                         }
 
                         // If a userID is found in the waitlist but not in the DB: add it to the DB
-                        foreach (int userID in waitlist)
+                        foreach (int userID in equipmentWaitlist)
                         {
                             if (!results.Contains(userID))
                             {
                                 String currentDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                createWaitsFor(conn, timeSlot.timeSlotID, userID, currentDateTime);
+                                createEquipmentWaitsFor(conn, equipment.equipmentName, userID, currentDateTime, 0, 1);
                             }
                         }
                     }
@@ -177,10 +173,10 @@ namespace TDG
                     }
 
                 }
-                // If the queue is empty, ensure it is empty by deleting all rows that have that timeslot id
+                // If the queue is empty, ensure it is empty by deleting all rows that have that equipment id
                 else
                 {
-                    String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + " = " + timeSlot.timeSlotID;
+                    String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + " = " + equipment.equipmentID;
                     MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
                     MySqlDataReader reader = null;
 
@@ -204,9 +200,30 @@ namespace TDG
             }
         }
 
-        private void createWaitsFor(MySqlConnection conn, int timeSlotID, int userID, String currentDateTime)
+        public void addEquipmentWaitsFor(string equipmentName, int userID, DateTime currentDateTime, int firstHour, int lastHour)
         {
-            String commandLine = "INSERT INTO " + TABLE_NAME + " VALUES ( " + timeSlotID + "," + userID + ", '" + currentDateTime + "');";
+
+            MySqlConnection conn = new MySqlConnection(DATABASE_CONNECTION_STRING);
+            String stringDateTime = currentDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+            // Attempt to open the connection and create many reservations
+            try
+            {
+                conn.Open();
+                    createEquipmentWaitsFor(conn, equipmentName, userID, stringDateTime, firstHour, lastHour);
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        private void createEquipmentWaitsFor(MySqlConnection conn, string equipmentName, int userID, string currentDateTime, int firstHour, int lastHour)
+        {
+            String commandLine = "INSERT INTO " + TABLE_NAME + " VALUES ( " + equipmentName + "," + userID + ", '" + currentDateTime + "," + firstHour + "," + lastHour + "');";
             MySqlDataReader reader = null;
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
             try
@@ -223,9 +240,9 @@ namespace TDG
                     reader.Close();
             }
         }
-        private void deleteWaitsFor(MySqlConnection conn, int timeSlotID, int userID)
+        private void deleteWaitsFor(MySqlConnection conn, int equipmentName, int userID)
         {
-            String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + timeSlotID + " AND " + FIELDS[1] + " = " + userID;
+            String commandLine = "DELETE FROM " + TABLE_NAME + " WHERE " + FIELDS[0] + "=" + equipmentName + " AND " + FIELDS[1] + " = " + userID;
             MySqlDataReader reader = null;
             MySqlCommand cmd = new MySqlCommand(commandLine, conn);
             try

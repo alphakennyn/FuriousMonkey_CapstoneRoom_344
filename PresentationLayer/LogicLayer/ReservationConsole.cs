@@ -38,72 +38,56 @@ namespace LogicLayer
             for (int i = firstHour; i <= lastHour; i++)
                 hours.Add(i);
 
-            //foreach (Reservation reservation in directoryOfReservations.reservationList)
-            foreach (Reservation reservation in ReservationMapper.getInstance().getListOfReservations())    //Goes through all reservations in listOfReservations
+            List<int> availableEquipmentIDList = new List<int>();
+            List<Equipment> equipmentList = new List<Equipment>();
+
+            availableEquipmentIDList = getAvailableEquipmentIDList(date, firstHour, lastHour, equipmentNameList);
+            
+            if (availableEquipmentIDList.Contains(-1))
             {
-                /*
-
-                //The equipment handling and its waitlist ***********EQUIPMENT WAITLIST WILL BE HANDLED IN THIS SECTION**********
-                if (reservation.date.Date == date.Date) //Checks each reservation with a matching date to the date selected
+                foreach( int i in availableEquipmentIDList)
                 {
-                    foreach (TimeSlot timeSlot in reservation.timeSlots)    //Check every timeslot in a reservation of the same date
+                    if (i == -1)
                     {
-                        for (int i = firstHour; i <= lastHour; i++) //Checks if timeslot above has overlapping time with selected time
-                        {
-                            if (timeSlot.hour == i) //if the timeslot above overlaps
-                            {
-                                foreach (Equipment e in reservation.equipmentList)  //Goes through all equipment in currently checked reservation
-                                {
-                                    if (!e.equipmentWaitList.Contains(userID) && reservation.userID != userID)
-                                    {
-                                        e.equipmentWaitList.Enqueue(userID);
+                        string equipmentName = equipmentNameList[i];    //specific equipment that is busy
 
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }*/
-
-                // Compare if the date (not the time portion) are the same and the rooms are the same
-                if (reservation.date.Date == date.Date && reservation.roomID == roomID)
-                {
-                    foreach (TimeSlot timeSlot in reservation.timeSlots)
-                    {
-                        for (int i = firstHour; i <= lastHour; i++)
-                        {
-                            if (timeSlot.hour == i)
-                            {
-                                if (!timeSlot.waitlist.Contains(userID) && reservation.userID != userID)
-                                {
-                                    timeSlot.waitlist.Enqueue(userID);
-                                    TimeSlotMapper.getInstance().setTimeSlot(timeSlot.timeSlotID, timeSlot.reservationID, timeSlot.waitlist); // It's already modifying the waitlist from the line above, do we need this?
-                                }
-                                hours.Remove(i);
-                            }
-                        }
+                        EquipmentWaitsForMapper.getInstance().putOnWaitingList(userID, date, firstHour, lastHour, equipmentName);
                     }
                 }
             }
-
-            bool equipmentAvailable = true; //Will be used to track if equipment was available
-            List<int> availableEquipmentIDList=new List<int>();
-            List<Equipment> equipmentList = new List<Equipment>();
-            if (equipmentAvailable)
+            else
             {
-                availableEquipmentIDList = getAvailableEquipmentIDList(date, firstHour, lastHour, equipmentNameList);
-                
                 foreach (int id in availableEquipmentIDList)
                 {
                     equipmentList.Add(EquipmentMapper.getInstance().getEquipment(id));
                 }
 
+                //foreach (Reservation reservation in directoryOfReservations.reservationList)
+                foreach (Reservation reservation in ReservationMapper.getInstance().getListOfReservations())    //Goes through all reservations in listOfReservations
+                {
+                    // Compare if the date (not the time portion) are the same and the rooms are the same
+                    if (reservation.date.Date == date.Date && reservation.roomID == roomID)
+                    {
+                        foreach (TimeSlot timeSlot in reservation.timeSlots)
+                        {
+                            for (int i = firstHour; i <= lastHour; i++)
+                            {
+                                if (timeSlot.hour == i)
+                                {
+                                    if (!timeSlot.waitlist.Contains(userID) && reservation.userID != userID)
+                                    {
+                                        timeSlot.waitlist.Enqueue(userID);
+                                        TimeSlotMapper.getInstance().setTimeSlot(timeSlot.timeSlotID, timeSlot.reservationID, timeSlot.waitlist); // It's already modifying the waitlist from the line above, do we need this?
+                                    }
+                                    hours.Remove(i);
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            else
-            {
-                //Don't let them reserve the room, terminate here and show that they were added to the equipment waitlist
-            }
-            if (hours.Count > 0)
+
+            if (hours.Count > 0 && !availableEquipmentIDList.Contains(-1))
             {
                 if (weeklyConstraintCheck(userID, date) && dailyConstraintCheck(userID,date,firstHour,lastHour))
                 {
@@ -586,7 +570,6 @@ namespace LogicLayer
             List<int> equipmentIDList = new List<int>();
             List<Reservation> reservationList = ReservationMapper.getInstance().getListOfReservations();
             List<Equipment> equipmentList = EquipmentMapper.getInstance().getListOfEquipment();
-            bool putOnWaitlist = false;
 
             foreach (string name in equipmentNameList)   //perform on each string in equipmentNameList *e.g. "computer"
             {
@@ -611,7 +594,7 @@ namespace LogicLayer
                                                 if (timeslot.hour == i) //If the reservation occurs at the same time as the specified time
                                                 {
                                                     isAvailable = false;
-                                                }                                          
+                                                }
                                             }
                                         }
                                     }
@@ -628,15 +611,8 @@ namespace LogicLayer
                 }
                 if (!equipmentFound)
                 {
-                    //put on waitlist
-
-                    putOnWaitlist = true;
+                    equipmentIDList.Add(-1);
                 }
-            }
-
-            if (putOnWaitlist)
-            {
-                return new List<int>();
             }
             return equipmentIDList;
         }
